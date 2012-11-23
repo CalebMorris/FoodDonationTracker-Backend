@@ -12,6 +12,16 @@ namespace front_end
 		public int sum(int a, int b){
 			return a+b;
 		}
+		
+		public void writePos_pickup(  ) {
+			/*	Writes a gps to DB of a pickup
+			 */
+		}
+		public void writePos_driver() {
+			/*	Writes a gps to DB of a driver
+			 * 	periodicly called by android app
+			 */
+		}
 	}
 }
 
