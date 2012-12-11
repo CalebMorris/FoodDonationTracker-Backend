@@ -54,7 +54,12 @@
     <Compile Include="webservice_mono.asmx.cs">
       <DependentUpon>webservice_mono.asmx</DependentUpon>
     </Compile>
-    <Compile Include="Gps.cs" />
+    <Compile Include="BackEnd.cs" />
+    <Compile Include="Donor.cs" />
+    <Compile Include="Driver.cs" />
+    <Compile Include="GPS.cs" />
+    <Compile Include="Receiver.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />

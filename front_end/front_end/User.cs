@@ -9,10 +9,10 @@ namespace back_end
 		protected GPS location;
 		
 		
-		//public User () {}
+		public User () { uName = ""; uPass = ""; location = null; }
 		public User ( string uname, string upass, GPS loc ) {
 			uName = uname; uPass = upass;
-			location = loc; status = Status.unavailable;
+			location = loc; 
 		}
 		
 		public string username() { return uName; }

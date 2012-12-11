@@ -13,7 +13,7 @@ namespace back_end
 		}
 		
 		public double getLat() { return latitude; }
-		public dobule getLon() { return longitude; }
+		public double getLon() { return longitude; }
 		public void setLat( double lat ) { latitude = lat; }
 		public void setLon( double lon ) { longitude = lon; }
 	}

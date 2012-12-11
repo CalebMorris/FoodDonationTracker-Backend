@@ -1,0 +1,20 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="front_end/webservice_mono.asmx.cs">
+    <Files>
+      <File FileName="front_end/webservice_mono.asmx.cs" Line="9" Column="20" />
+      <File FileName="front_end/web.config" Line="1" Column="1" />
+      <File FileName="front_end/Global.asax" Line="1" Column="1" />
+      <File FileName="front_end/Global.asax.cs" Line="1" Column="1" />
+      <File FileName="front_end/Receiver.cs" Line="4" Column="2" />
+      <File FileName="front_end/Driver.cs" Line="17" Column="37" />
+      <File FileName="front_end/Donor.cs" Line="7" Column="35" />
+      <File FileName="front_end/Default.aspx" Line="12" Column="1" />
+      <File FileName="front_end/Default.aspx.cs" Line="12" Column="6" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

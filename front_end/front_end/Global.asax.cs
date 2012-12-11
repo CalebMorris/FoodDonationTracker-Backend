@@ -11,10 +11,17 @@ namespace front_end
 		
 		protected virtual void Application_Start (Object sender, EventArgs e)
 		{
+			Application["Counter"] = 0;
 		}
 		
 		protected virtual void Session_Start (Object sender, EventArgs e)
 		{
+			if (Application["Counter"] != null)
+	        {
+	            Application.Lock();
+	            Application["Counter"] = ((int)Application["Counter"]) + 1;
+	            Application.UnLock();
+	        }
 		}
 		
 		protected virtual void Application_BeginRequest (Object sender, EventArgs e)
@@ -34,7 +41,13 @@ namespace front_end
 		}
 		
 		protected virtual void Session_End (Object sender, EventArgs e)
-		{
+		{	
+			if (Application["Counter"] != null)
+	        {
+	            Application.Lock();
+	            Application["Counter"] = ((int)Application["Counter"]) - 1;
+	            Application.UnLock();
+	        }
 		}
 		
 		protected virtual void Application_End (Object sender, EventArgs e)
