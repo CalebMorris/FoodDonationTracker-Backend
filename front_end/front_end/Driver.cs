@@ -3,20 +3,13 @@ using System;
 namespace back_end
 {
 	public class Driver : User
-	{
-		public enum Status {
-			available, unavailable, 
-			assigned, enroute, 
-			pickedup, droppedoff,
-			unable_to_deliver
-		};
-		
+	{	
 		protected Status status;
 		Donor pickup;
 		
-		public Driver (): base("","",null) { }
+		public Driver (): base("","","Driver",null) { }
 		public Driver( string uname, string upass, GPS loc ) 
-				: base(uname, upass, loc ) {
+				: base(uname, upass, "Driver", loc ) {
 		}
 		
 		public Status getStatus() { return status; }

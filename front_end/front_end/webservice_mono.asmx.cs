@@ -19,9 +19,9 @@ namespace front_end
 		protected List<Driver> drivers;
 		
 		public struct Query {
-			public Driver.Status stat;
+			public Status stat;
 			public string message;
-			public Query( Driver.Status s, string m ) {
+			public Query( Status s, string m ) {
 				stat = s;
 				message = m;
 			}
@@ -36,6 +36,27 @@ namespace front_end
 				time = t;
 				location = l;
 				message = m;
+			}
+		}
+		
+		public struct Authen {
+			//Return status, token, role, message
+			public Status status;
+			public string token;
+			public string message;
+			public string role;
+			
+			public Authen( string t, string m, string r ) {
+				token = t; message = m; role = r;
+				if( r == "Donor" ) {
+					status = Status.unavailable;
+				}
+				else if( r == "Driver" ) {
+					status = Status.unavailable;
+				}
+				else if( r == "Receiver" ) {
+					status = Status.unavailable;
+				}
 			}
 		}
 		
@@ -125,18 +146,48 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public bool authenticateUser( string email, string pass ) {
+		public Authen authenticateUser( string email, string pass ) {
 			//Return status, token, role, message
 			MD5 token = MD5.Create(email+pass);
 			Console.Write(token.Hash);
 			
-			return false;
+			bool flag = false;
+			int i = 0;
+			User uTmp = null;
+			for( i = 0; i < drivers.Count 
+			  && drivers[i].username() != email; ++i );
+			if( i != drivers.Count ) {
+				flag = drivers[i].authenticate(email, pass);
+				uTmp = drivers[i];
+			}
+			else {
+				for( i = 0; i < donors.Count 
+			      && donors[i].username() != email; ++i );
+				if( i != donors.Count ) {
+					flag = donors[i].authenticate(email, pass);
+					uTmp = donors[i];
+				}
+				else {
+					for( i = 0; i < recievers.Count 
+			    	  && recievers[i].username() != email; ++i );
+					if( i != recievers.Count ) {
+						flag = recievers[i].authenticate(email, pass);
+						uTmp = recievers[i];
+					}
+				}
+			}
+			
+			Application["Authenticated"] = flag;
+			return Authen( 
+			              token.Hash, 
+			              "", 
+			              uTmp.getRole() );
 		}
 		
 		[WebMethod]
-		public Query statusChange( Driver d, Driver.Status s ) {
+		public Query statusChange( Driver d, Status s ) {
 			//Return status, message
-			if( false ) {
+			if( (bool)Application["Authenticated"] ) {
 				//Authenticated
 				return Query( d.updateStatus(s), "" );
 			}
@@ -148,7 +199,7 @@ namespace front_end
 		[WebMethod]
 		public Query queryStatus( Driver d ) {
 			//Return status, message
-			if( false ) {
+			if( (bool)Application["Authenticated"] ) {
 				return Query( d.getStatus(), "" );
 			}
 			else {
@@ -159,8 +210,8 @@ namespace front_end
 		[WebMethod]
 		public Place queryPickup( Donor d ) {
 			//Return time, location, details
-			if( false ) {
-				return Place( DataTime.Now, d.getLoc(), "" );
+			if( (bool)Application["Authenticated"] ) {
+				return Place( System.DateTime.Now, d.getLoc(), "" );
 			}
 			else {
 				return Place(null, null, "Unauthenticated");	
@@ -170,8 +221,8 @@ namespace front_end
 		[WebMethod]
 		public Place queryDropoff( Receiver r ) {
 			//Return time, location, details
-			if( false) {
-				return Place( DataTime.Now, r.getLoc(), "" );
+			if( (bool)Application["Authenticated"] ) {
+				return Place( System.DateTime.Now, r.getLoc(), "" );
 			}
 			else {
 				return Place(null, null, "Unauthenticated");	
