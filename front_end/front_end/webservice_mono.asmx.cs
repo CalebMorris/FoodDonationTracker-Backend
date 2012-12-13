@@ -142,7 +142,7 @@ namespace front_end
 					return -1;
 				}
 			}
-			((List<Receiver>)appState["recievers"]).Add( new Receiver( user, pass,  new GPS(33.71,141.13) ));
+			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass,  new GPS(33.71,141.13) ));
 			
 			return 1;
 		}
