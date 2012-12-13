@@ -7,7 +7,7 @@ namespace back_end
 		protected double latitude;
 		protected double longitude;
 		
-		//public GPS () { }
+		public GPS () { latitude = -1; longitude = -1; }
 		public GPS ( double lat, double lon ) {
 			latitude = lat; longitude = lon;
 		}

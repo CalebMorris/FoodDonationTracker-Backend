@@ -8,7 +8,8 @@ namespace back_end
 			pickedup, droppedoff,
 			unable_to_deliver,
 		
-			unassigned, waiting
+			unassigned, waiting,
+			unauthenticated
 		};
 	
 	public class User

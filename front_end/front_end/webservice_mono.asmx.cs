@@ -13,10 +13,7 @@ namespace front_end
 	[WebService(Namespace = "http://capstone485.asu.edu/")]
 	public partial class webservice_mono : System.Web.UI.Page
 	{
-		
-		protected List<Donor> donors;
-		protected List<Receiver> recievers;
-		protected List<Driver> drivers;
+		protected HttpApplicationState appState;
 		
 		public struct Query {
 			public Status stat;
@@ -48,74 +45,63 @@ namespace front_end
 			
 			public Authen( string t, string m, string r ) {
 				token = t; message = m; role = r;
-				if( r == "Donor" ) {
-					status = Status.unavailable;
-				}
-				else if( r == "Driver" ) {
-					status = Status.unavailable;
-				}
-				else if( r == "Receiver" ) {
-					status = Status.unavailable;
-				}
+				status = Status.unavailable;
 			}
 		}
 		
 		public webservice_mono(){
-			/*
-			appState.Clear();
-			appState.Add("donors", donors);
-			appState.Add("receivers", recievers);
-			appState.Add("drivers", drivers);
-			appState["donors"] = new List<Donor>();
-			appState["receivers"] = new List<Receiver>();
-			appState["drivers"] = new List<Driver>();
-			*/
+
+			appState = HttpContext.Current.Application;
 		}
 		
 		[WebMethod]
 		public string printDrivers() {
-			
-			string ret = "";
-			/*
-			for( int i = 0; i < ((List<Driver>)appState["drivers"]).Count; ++i ) {
-				ret += ((List<Driver>)appState["drivers"])[i].username() + "\n";
+			string ret = "Drivers: \n";
+			List<Driver> tmp = (List<Driver>)appState["drivers"];
+			if( tmp.Count == 0 ) {
+				return "No Drivers";
 			}
-			*/
-			return ret;
-			
-		}
-		
-		[WebMethod]
-		public int countActive() {
-			HttpApplicationState appState;
-			appState = Application.Contents;
-			int OnlineUsers = 0;
-			if (appState["Counter"] != null)
-	        {
-	            OnlineUsers = ((int)appState["Counter"]);
-	        }
-			return OnlineUsers;
-		}
-		
-		[WebMethod]
-		public int writeReceiver( string user, string pass ) {
-			/*
-			if( appState["receivers"] == null ) {
-				appState["receivers"] = new List<Receiver>();
-			}
-			for( int i = 0; i < ((List<Receiver>)appState["receivers"]).Count; ++i ) {
-				if( user == ((List<Receiver>)appState["receivers"])[i].username() ) {
-					return -1;
+			else {
+				for( int i = 0; i < tmp.Count; ++i ) {
+					ret += tmp[i].username() + "\n";
 				}
+				return ret;
 			}
-			((List<Receiver>)appState["recievers"]).Add( new Receiver( user, pass, null ));
-			*/
-			return 1;
+		}
+		
+		[WebMethod]
+		public string printDonors() {
+			string ret = "Donors: \n";
+			List<Donor> tmp = (List<Donor>)appState["donors"];
+			if( tmp.Count == 0 ) {
+				return "No Donors";
+			}
+			else {
+				for( int i = 0; i < tmp.Count; ++i ) {
+					ret += tmp[i].username() + "\n";
+				}
+				return ret;
+			}
+		}
+		
+		[WebMethod]
+		public string printReceivers() {
+			string ret = "Receivers: \n";
+			List<Receiver> tmp = (List<Receiver>)appState["receivers"];
+			if( tmp.Count == 0 ) {
+				return "No Receivers";
+			}
+			else {
+				for( int i = 0; i < tmp.Count; ++i ) {
+					ret += tmp[i].username() + "\n";
+				}
+				return ret;
+			}
 		}
 		
 		[WebMethod]
 		public int writeDriver( string user, string pass ) {
-			/*
+			
 			if( appState["donors"] == null ) {
 				appState["donors"] = new List<Donor>();
 			}
@@ -124,14 +110,14 @@ namespace front_end
 					return -1;
 				}
 			}
-			((List<Driver>)appState["drivers"]).Add( new Driver( user, pass, null ));
-			*/
+			((List<Driver>)appState["drivers"]).Add( new Driver( user, pass, new GPS(33.71,141.13) ));
+			
 			return 1;
 		}
 		
 		[WebMethod]
 		public int writeDonor( string user, string pass ) {
-			/*
+			
 			if( appState["drivers"] == null ) {
 				appState["drivers"] = new List<Driver>();
 			}
@@ -140,94 +126,199 @@ namespace front_end
 					return -1;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, null ));
-			*/
+			((List<Donor>)appState["donors"]).Add( new Donor( user, pass,  new GPS(33.71,141.13) ));
+			
+			return 1;
+		}
+		
+		[WebMethod]
+		public int writeReceiver( string user, string pass ) {
+			
+			if( appState["receivers"] == null ) {
+				appState["receivers"] = new List<Receiver>();
+			}
+			for( int i = 0; i < ((List<Receiver>)appState["receivers"]).Count; ++i ) {
+				if( user == ((List<Receiver>)appState["receivers"])[i].username() ) {
+					return -1;
+				}
+			}
+			((List<Receiver>)appState["recievers"]).Add( new Receiver( user, pass,  new GPS(33.71,141.13) ));
+			
 			return 1;
 		}
 		
 		[WebMethod]
 		public Authen authenticateUser( string email, string pass ) {
 			//Return status, token, role, message
-			MD5 token = MD5.Create(email+pass);
-			Console.Write(token.Hash);
+			MD5 hasher = MD5.Create();
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+pass)))
+                    sb.Append(b.ToString("x2").ToLower());
+			string hash = sb.ToString();
+			
+			List<Driver> 	tmpDr = (List<Driver>)appState["drivers"];
+			List<Donor> 	tmpDo = (List<Donor>)appState["donors"];
+			List<Receiver> 	tmpR  = (List<Receiver>)appState["receivers"];
 			
 			bool flag = false;
 			int i = 0;
-			User uTmp = null;
-			for( i = 0; i < drivers.Count 
-			  && drivers[i].username() != email; ++i );
-			if( i != drivers.Count ) {
-				flag = drivers[i].authenticate(email, pass);
-				uTmp = drivers[i];
+			User uTmp;
+			for( i = 0; i < tmpDr.Count 
+			  && tmpDr[i].username() != email; ++i );
+			if( i != tmpDr.Count ) {
+				flag = tmpDr[i].authenticate(email, pass);
+				uTmp = tmpDr[i];
 			}
 			else {
-				for( i = 0; i < donors.Count 
-			      && donors[i].username() != email; ++i );
-				if( i != donors.Count ) {
-					flag = donors[i].authenticate(email, pass);
-					uTmp = donors[i];
+				for( i = 0; i < tmpDo.Count 
+			      && tmpDo[i].username() != email; ++i );
+				if( i != tmpDo.Count ) {
+					flag = tmpDo[i].authenticate(email, pass);
+					uTmp = tmpDo[i];
 				}
 				else {
-					for( i = 0; i < recievers.Count 
-			    	  && recievers[i].username() != email; ++i );
-					if( i != recievers.Count ) {
-						flag = recievers[i].authenticate(email, pass);
-						uTmp = recievers[i];
+					for( i = 0; i < tmpR.Count 
+			    	  && tmpR[i].username() != email; ++i );
+					if( i != tmpR.Count ) {
+						flag = tmpR[i].authenticate(email, pass);
+						uTmp = tmpR[i];
 					}
 				}
 			}
 			
-			Application["Authenticated"] = flag;
-			return Authen( 
-			              token.Hash, 
-			              "", 
-			              uTmp.getRole() );
+			//appState["Authenticated"] = flag;
+			if( i == tmpR.Count ) {
+				return new Authen( "", "User Not Found", "User" );
+			}
+			else if( flag == false ) {
+				return new Authen( "", "Password Incorrect", "User" );
+			}
+			else {
+				return new Authen( hash, "", uTmp.getRole() );
+			}
 		}
 		
+		[WebMethod]
+		public Query statusChange( string email, string pass, Status s ) {
+			//Return status, message
+			List<Driver> tmpDr = (List<Driver>)appState["drivers"];
+			Driver d;
+			int i; bool flag = false;
+			for( i = 0; i < tmpDr.Count 
+			  && tmpDr[i].username() != email; ++i );
+			if( i != tmpDr.Count ) {
+				flag = tmpDr[i].authenticate(email, pass);
+				d = tmpDr[i];
+			}
+			if( flag ) {
+				//Authenticated
+				return new Query( d.updateStatus(s), "" );
+			}
+			else {
+				return new Query( Status.unauthenticated, "Unauthenticated" );
+			}
+		}
+		
+		/*
 		[WebMethod]
 		public Query statusChange( Driver d, Status s ) {
 			//Return status, message
 			if( (bool)Application["Authenticated"] ) {
 				//Authenticated
-				return Query( d.updateStatus(s), "" );
+				return new Query( d.updateStatus(s), "" );
 			}
 			else {
-				return Query( null, "Unauthenticated" );
+				return new Query( Status.unauthenticated, "Unauthenticated" );
+			}
+		}
+		*/
+		
+		[WebMethod]
+		public Query queryStatus( string email ) {
+			//Return status, message
+			List<Driver> tmpDr = (List<Driver>)appState["drivers"];
+			Driver d;
+			int i;
+			for( i = 0; i < tmpDr.Count 
+			  && tmpDr[i].username() != email; ++i );
+			if( i != tmpDr.Count ) {
+				d = tmpDr[i];
+				return new Query( d.getStatus(), "" );
+			}
+			else {
+				return new Query( Status.unauthenticated, "Unauthenticated");
 			}
 		}
 		
+		/*
 		[WebMethod]
 		public Query queryStatus( Driver d ) {
 			//Return status, message
 			if( (bool)Application["Authenticated"] ) {
-				return Query( d.getStatus(), "" );
+				return new Query( d.getStatus(), "" );
 			}
 			else {
-				return Query(null, "Unauthenticated");
+				return new Query( Status.unauthenticated, "Unauthenticated");
+			}
+		}
+		*/
+		
+		[WebMethod]
+		public Place queryPickup( string email ) {
+			//Return time, location, details
+			List<Donor> tmpDr = (List<Donor>)appState["donors"];
+			Donor d; int i;
+			for( i = 0; i < tmpDr.Count 
+			  && tmpDr[i].username() != email; ++i );
+			if( i != tmpDr.Count ) {
+				d = tmpDr[i];
+				return new Place( System.DateTime.Now, d.getLoc(), "" );
+			}
+			else {
+				return new Place( new System.DateTime(), new GPS(), "Unauthenticated");	
 			}
 		}
 		
+		/*
 		[WebMethod]
 		public Place queryPickup( Donor d ) {
 			//Return time, location, details
 			if( (bool)Application["Authenticated"] ) {
-				return Place( System.DateTime.Now, d.getLoc(), "" );
+				return new Place( System.DateTime.Now, d.getLoc(), "" );
 			}
 			else {
-				return Place(null, null, "Unauthenticated");	
+				return new Place( new System.DateTime(), new GPS(), "Unauthenticated");	
 			}
 		}
+		*/
 		
+		[WebMethod]
+		public Place queryDropoff( string email ) {
+			//Return time, location, details
+			List<Receiver> tmpDr = (List<Receiver>)appState["receivers"];
+			Receiver d; int i;
+			for( i = 0; i < tmpDr.Count 
+			  && tmpDr[i].username() != email; ++i );
+			if( i != tmpDr.Count ) {
+				d = tmpDr[i];
+				return new Place( System.DateTime.Now, d.getLoc(), "" );
+			}
+			else {
+				return new Place( new System.DateTime(), new GPS(), "Unauthenticated");	
+			}
+		}
+		/*
 		[WebMethod]
 		public Place queryDropoff( Receiver r ) {
 			//Return time, location, details
 			if( (bool)Application["Authenticated"] ) {
-				return Place( System.DateTime.Now, r.getLoc(), "" );
+				return new Place( System.DateTime.Now, r.getLoc(), "" );
 			}
 			else {
-				return Place(null, null, "Unauthenticated");	
+				return new Place( new System.DateTime(), new GPS(), "Unauthenticated");	
 			}
 		}
+		*/
 	}
 }
 
