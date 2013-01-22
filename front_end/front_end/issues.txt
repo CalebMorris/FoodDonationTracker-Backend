@@ -1,2 +1,3 @@
-How do we prioritize the drop-off locations?
-Is the drop-off places timed or do they have their own app?
+1.How do we prioritize the drop-off locations?
+2.Is the drop-off places timed or do they have their own app?
+3.Just one registered GCM API key or one per server/device?
