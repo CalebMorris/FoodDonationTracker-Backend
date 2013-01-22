@@ -70,4 +70,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <None Include="issues.txt" />
+  </ItemGroup>
 </Project>
