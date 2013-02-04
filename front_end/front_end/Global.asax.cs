@@ -17,6 +17,7 @@ namespace front_end
 			Application["donors"] = new List<Donor>();
 			Application["receivers"] = new List<Receiver>();
 			Application["drivers"] = new List<Driver>();
+			Application["users"] = new Dictionary<String, User>();
 		}
 		
 		protected virtual void Session_Start (Object sender, EventArgs e)
@@ -42,12 +43,6 @@ namespace front_end
 		
 		protected virtual void Session_End (Object sender, EventArgs e)
 		{	
-			if (Application["Counter"] != null)
-	        {
-	            Application.Lock();
-	            Application["Counter"] = ((int)Application["Counter"]) - 1;
-	            Application.UnLock();
-	        }
 		}
 		
 		protected virtual void Application_End (Object sender, EventArgs e)

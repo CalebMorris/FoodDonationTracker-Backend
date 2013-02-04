@@ -43,8 +43,8 @@ namespace front_end
 			public string message;
 			public string role;
 			
-			public Authen( string t, string m, string r ) {
-				token = t; message = m; role = r;
+			public Authen( string tok, string mes, string rol ) {
+				token = tok; message = mes; role = rol;
 				status = Status.unavailable;
 			}
 		}
@@ -116,7 +116,7 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public int writeDonor( string user, string pass ) {
+		public int writeDonor( string user, string pass, GPS location, double ttl ) {
 			
 			if( appState["drivers"] == null ) {
 				appState["drivers"] = new List<Driver>();
@@ -126,13 +126,13 @@ namespace front_end
 					return -1;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, pass,  new GPS(33.71,141.13) ));
+			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, location, ttl ));
 			
 			return 1;
 		}
 		
 		[WebMethod]
-		public int writeReceiver( string user, string pass ) {
+		public int writeReceiver( string user, string pass, GPS location ) {
 			
 			if( appState["receivers"] == null ) {
 				appState["receivers"] = new List<Receiver>();
@@ -142,7 +142,7 @@ namespace front_end
 					return -1;
 				}
 			}
-			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass,  new GPS(33.71,141.13) ));
+			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass,  location ));
 			
 			return 1;
 		}
@@ -162,7 +162,7 @@ namespace front_end
 			
 			bool flag = false;
 			int i = 0;
-			User uTmp;
+			User uTmp = null;
 			for( i = 0; i < tmpDr.Count 
 			  && tmpDr[i].username() != email; ++i );
 			if( i != tmpDr.Count ) {
@@ -194,25 +194,32 @@ namespace front_end
 				return new Authen( "", "Password Incorrect", "User" );
 			}
 			else {
-				return new Authen( hash, "", uTmp.getRole() );
+				((Dictionary<String, User>)appState["users"]).Add(hash, uTmp);
+				return new Authen( hash, "Succesful Authen", uTmp.getRole() );
 			}
 		}
 		
 		[WebMethod]
-		public Query statusChange( string email, string pass, Status s ) {
+		public Query statusChange( string authenToken, Status s ) {
 			//Return status, message
-			List<Driver> tmpDr = (List<Driver>)appState["drivers"];
-			Driver d;
-			int i; bool flag = false;
-			for( i = 0; i < tmpDr.Count 
-			  && tmpDr[i].username() != email; ++i );
-			if( i != tmpDr.Count ) {
-				flag = tmpDr[i].authenticate(email, pass);
-				d = tmpDr[i];
+			List<Driver> tmpDr = 
+				(List<Driver>)appState["drivers"];
+			Dictionary<String, User> tmpAuthn = 
+				(Dictionary<String, User>)appState["users"];
+			User uTmp = null;
+			if( tmpAuthn.ContainsKey(authenToken) ) {
+				uTmp = tmpAuthn[authenToken];
 			}
-			if( flag ) {
+			else {
+				return new Query( Status.error, "Authen Token Not Recognized");				
+			}
+			bool userIsDriver = false;
+			int i;
+			for( i = 0; i < tmpDr.Count && uTmp.username() != tmpDr[i].username(); ++i );
+			userIsDriver = (i != tmpDr.Count);
+			if( userIsDriver ) {
 				//Authenticated
-				return new Query( d.updateStatus(s), "" );
+				return new Query( tmpDr[i].updateStatus(s), "Status Succesfully Updated" );
 			}
 			else {
 				return new Query( Status.unauthenticated, "Unauthenticated" );
@@ -234,16 +241,24 @@ namespace front_end
 		*/
 		
 		[WebMethod]
-		public Query queryStatus( string email ) {
+		public Query queryStatus( string authenToken ) {
 			//Return status, message
-			List<Driver> tmpDr = (List<Driver>)appState["drivers"];
-			Driver d;
+			List<Driver> tmpDr = 
+				(List<Driver>)appState["drivers"];
+			Dictionary<String, User> tmpAuthn = 
+				(Dictionary<String, User>)appState["users"];
+			User uTmp = null;
+			if( tmpAuthn.ContainsKey(authenToken) ) {
+				uTmp = tmpAuthn[authenToken];
+			}
+			else{
+				return new Query( Status.error, "Authen Token Not Recognized");	
+			}
 			int i;
-			for( i = 0; i < tmpDr.Count 
-			  && tmpDr[i].username() != email; ++i );
+			for( i = 0; i < tmpDr.Count && 
+			    tmpDr[i].username() != uTmp.username(); ++i );
 			if( i != tmpDr.Count ) {
-				d = tmpDr[i];
-				return new Query( d.getStatus(), "" );
+				return new Query( tmpDr[i].getStatus(), "Current Status" );
 			}
 			else {
 				return new Query( Status.unauthenticated, "Unauthenticated");

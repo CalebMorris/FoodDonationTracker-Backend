@@ -1,3 +1,5 @@
-1.How do we prioritize the drop-off locations?
-2.Is the drop-off places timed or do they have their own app?
-3.Just one registered GCM API key or one per server/device?
+1. Adding response code as well as message
+	Similar to http protocol (404,200,etc)
+2.How do we prioritize the drop-off locations?
+3.Is the drop-off places timed or do they have their own app?
+4.Just one registered GCM API key or one per server/device?

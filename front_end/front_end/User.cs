@@ -9,16 +9,17 @@ namespace back_end
 			unable_to_deliver,
 		
 			unassigned, waiting,
-			unauthenticated
+			unauthenticated,
+		
+			error
 		};
 	
 	public class User
 	{	
-		
-		protected string uName; // or Password
-		protected string uPass; //TODO CHANGE THIS
-		protected string role;
-		protected GPS location;
+		string uName; // or Password
+		string uPass; //TODO CHANGE THIS
+		string role;
+		public GPS location;
 		
 		
 		public User () { uName = ""; uPass = ""; 
