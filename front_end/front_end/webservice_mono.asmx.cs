@@ -200,8 +200,15 @@ namespace front_end
 		}
 		
 		[WebMethod]
+		public void testPush( string deviceId, string message ) {
+			Pusher.SendNotification(deviceId, message);			
+		}
+		
+		[WebMethod]
 		public Query statusChange( string authenToken, Status s ) {
 			//Return status, message
+			//TODO add state change here 
+			//TODO   if state because available, push the next pickup (if available)
 			List<Driver> tmpDr = 
 				(List<Driver>)appState["drivers"];
 			Dictionary<String, User> tmpAuthn = 
