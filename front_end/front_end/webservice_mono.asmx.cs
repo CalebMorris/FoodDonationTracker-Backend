@@ -200,8 +200,8 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public void testPush( string deviceId, string message ) {
-			Pusher.SendNotification(deviceId, message);			
+		public string testPush( string deviceId, string message ) {
+			return Pusher.SendNotification(deviceId, message);			
 		}
 		
 		[WebMethod]
