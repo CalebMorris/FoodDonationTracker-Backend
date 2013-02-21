@@ -179,10 +179,10 @@ namespace front_end
 		[WebMethod]
 		public bool GCMRegister( string authenToken, string regId ) {
 			//@TODO Implement
-			Dictionary<String, Tuple<User, String>> users = (Dictionary<String, Tuple<User,String>>)Application["users"];
-			if( Application["users"] == null ) {
+			Dictionary<String, Tuple<User, String>> users = (Dictionary<String, Tuple<User,String>>)appState["users"];
+			if( appState["users"] == null ) {
 				//There aren't any users
-				Application["users"] = new Dictionary<String, Tuple<User,String>>();
+				appState["users"] = new Dictionary<String, Tuple<User,String>>();
 				return false;
 			}
 			if( !users.ContainsKey(authenToken) ) {
@@ -271,8 +271,17 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public string testPush( string authenToken, string message ) {
-			String deviceId = ((Dictionary<String, Tuple<User,String>>)Application["users"])[authenToken].Item2;
+		public string testPush (string authenToken, string message)
+		{
+			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
+			if (users == null) {
+				users = new Dictionary<string, Tuple<User, string>> ();
+				return "No Users";
+			}
+			if (!users.ContainsKey (authenToken)) {
+				return "Token not recognized";
+			}
+			String deviceId = users[authenToken].Item2;
 			return Pusher.SendNotification(deviceId, message);			
 		}
 		
@@ -372,7 +381,7 @@ namespace front_end
 		[WebMethod]
 		public string printUsers() {
 			string result = "";
-			Dictionary<String, Tuple<User,String>> users = (Dictionary<String, Tuple<User,String>>)Application["users"];
+			Dictionary<String, Tuple<User,String>> users = (Dictionary<String, Tuple<User,String>>)appState["users"];
 			if( users == null )
 				users = new Dictionary<string, Tuple<User, string>>();
 			if( users.Count == 0 )
