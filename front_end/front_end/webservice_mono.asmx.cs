@@ -104,8 +104,8 @@ namespace front_end
 		[WebMethod]
 		public int writeDriver( string email, string password) {
 			
-			if( appState["donors"] == null ) {
-				appState["donors"] = new List<Donor>();
+			if( appState["drivers"] == null ) {
+				appState["drivers"] = new List<Donor>();
 			}
 			for( int i = 0; i < ((List<Driver>)appState["drivers"]).Count; ++i ) {
 				if( email == ((List<Driver>)appState["drivers"])[i].username() ) {
@@ -120,8 +120,8 @@ namespace front_end
 		[WebMethod]
 		public int writeDonor( string email, string password, GPS location, double ttl ) {
 			
-			if( appState["drivers"] == null ) {
-				appState["drivers"] = new List<Driver>();
+			if( appState["donors"] == null ) {
+				appState["donors"] = new List<Driver>();
 			}
 			for( int i = 0; i < ((List<Donor>)appState["donors"]).Count; ++i ) {
 				if( email == ((List<Donor>)appState["donors"])[i].username() ) {
@@ -165,11 +165,11 @@ namespace front_end
 			bool flag = false;
 			int i = 0;
 			User uTmp = null;
-			for( i = 0; i < tmpDr.Count 
-			  && tmpDr[i].username() != email; ++i );
-			if( i != tmpDr.Count ) {
-				flag = tmpDr[i].authenticate(email, password);
-				uTmp = tmpDr[i];
+
+			uTmp = tmpDr.Find(x => x.username().Equals(email));
+
+			if( uTmp != null ) {
+				flag = uTmp.authenticate(email, password);
 			}
 			else {
 				for( i = 0; i < tmpDo.Count 
@@ -187,16 +187,16 @@ namespace front_end
 					}
 				}
 			}
-			
+
 			//appState["Authenticated"] = flag;
-			if( i == tmpR.Count ) {
+			if( uTmp == null ) {
 				return new Authen( "", "User Not Found", "User" );
 			}
 			else if( flag == false ) {
 				return new Authen( "", "Password Incorrect", "User" );
 			}
 			else {
-				((Dictionary<String, User>)appState["users"]).Add(hash, uTmp);
+				((Dictionary<String, User>)appState["users"])[hash] = uTmp; //.Add(hash, uTmp); add throws exception if it already exists
 				return new Authen( hash, "Succesful Authen", uTmp.getRole() );
 			}
 		}
