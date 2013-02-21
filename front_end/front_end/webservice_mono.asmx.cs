@@ -373,6 +373,10 @@ namespace front_end
 		public string printUsers() {
 			string result = "";
 			Dictionary<String, Tuple<User,String>> users = (Dictionary<String, Tuple<User,String>>)Application["users"];
+			if( users == null )
+				users = new Dictionary<string, Tuple<User, string>>();
+			if( users.Count == 0 )
+				return "No Users\n";
 			foreach( String key in users.Keys) {
 				result += key + " " + users[key].Item1 + " " + users[key].Item2 + "\n";
 			}
