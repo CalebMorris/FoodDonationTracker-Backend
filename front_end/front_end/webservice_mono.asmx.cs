@@ -21,9 +21,9 @@ namespace front_end
 		protected HttpApplicationState appState;
 		
 		public struct Query {
-			public Status status;
+			public string status;
 			public string message;
-			public Query( Status status, string m ) {
+			public Query( string status, string m ) {
 				this.status = status;
 				message = m;
 			}
@@ -141,7 +141,7 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public Query statusChange( string authenToken, Status status ) {
+		public Query statusChange( string authenToken, string status ) {
 			//Return status, message
 			//TODO add state change here 
 			//TODO   if state because available, push the next pickup (if available)
@@ -154,7 +154,7 @@ namespace front_end
 				uTmp = tmpAuthn[authenToken];
 			}
 			else {
-				return new Query( Status.error, "Authen Token Not Recognized");				
+				return new Query( "error", "Authen Token Not Recognized");				
 			}
 			bool userIsDriver = false;
 			int i;
@@ -165,7 +165,7 @@ namespace front_end
 				return new Query( tmpDr[i].updateStatus(status), "Status Succesfully Updated" );
 			}
 			else {
-				return new Query( Status.unauthenticated, "Unauthenticated" );
+				return new Query( "unauthenticated", "Unauthenticated" );
 			}
 		}
 		
@@ -193,7 +193,7 @@ namespace front_end
 				uTmp = tmpAuthn[authenToken];
 			}
 			else{
-				return new Query( Status.error, "Authen Token Not Recognized");	
+				return new Query( "error", "Authen Token Not Recognized");	
 			}
 			int i;
 			for( i = 0; i < tmpDr.Count && 
@@ -202,10 +202,11 @@ namespace front_end
 				return new Query( tmpDr[i].getStatus(), "Current Status" );
 			}
 			else {
-				return new Query( Status.unauthenticated, "Unauthenticated");
+				return new Query( "unauthenticated", "Unauthenticated");
 			}
 		}
 		
+		[WebMethod]
 		public Donation queryDonation( string authenToken ) {
 			//@TODO implement
 			

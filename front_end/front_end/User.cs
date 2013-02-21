@@ -2,18 +2,6 @@ using System;
 
 namespace back_end
 {
-	public enum Status {
-			available, unavailable, 
-			assigned, enroute, 
-			pickedup, droppedoff,
-			unable_to_deliver,
-		
-			unassigned, waiting,
-			unauthenticated,
-		
-			error
-		};
-	
 	public class User
 	{	
 		string uName; // or Password

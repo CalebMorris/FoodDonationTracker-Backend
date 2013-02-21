@@ -4,7 +4,7 @@ namespace back_end
 {
 	public class Driver : User
 	{	
-		protected Status status;
+		protected string status;
 		Donor pickup;
 		Receiver dropoff;
 		
@@ -18,16 +18,16 @@ namespace back_end
 			dropoff = null;
 		}
 		
-		public Status getStatus() { return status; }
+		public string getStatus() { return status; }
 		public Donor getPickup() { return pickup; }
 		public Receiver getDropoff() { return dropoff; }
-		public Status updateStatus( Status stat ) { 
+		public string updateStatus( string stat ) { 
 			status = stat; 
 			return status; 
 		}
 		public void assignPickup( Donor donor ) {
 			if( donor != null ) {
-				status = Status.assigned;
+				status = "assigned";
 				pickup = donor;
 			}
 			else {
