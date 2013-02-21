@@ -135,7 +135,8 @@ namespace front_end
 				return new Authen( "", "Password Incorrect", "User" );
 			}
 			else {
-				((Dictionary<String, User>)appState["users"])[hash] = uTmp; //.Add(hash, uTmp); add throws exception if it already exists
+				
+				((Dictionary<String, Tuple<User,String>>)appState["users"])[hash] = new Tuple<User,String>(uTmp, "");
 				return new Authen( hash, "Succesful Authen", uTmp.getRole() );
 			}
 		}
@@ -176,7 +177,7 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public bool GCMRegister( string regId ) {
+		public bool GCMRegister( string authenToken, string regId ) {
 			//@TODO Implement
 			Dictionary<String, Tuple<User, String>> users = (Dictionary<String, Tuple<User,String>>)Application["users"];
 			if( Application["users"] == null ) {
@@ -270,7 +271,8 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public string testPush( string deviceId, string message ) {
+		public string testPush( string authenToken, string message ) {
+			String deviceId = ((Dictionary<String, Tuple<User,String>>)Application["users"])[authenToken].Item2;
 			return Pusher.SendNotification(deviceId, message);			
 		}
 		
