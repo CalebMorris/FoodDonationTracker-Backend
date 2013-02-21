@@ -81,11 +81,11 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public Authen authenticateUser( string email, string pass ) {
+		public Authen authenticateUser( string email, string password ) {
 			//Return status, token, role, message
 			MD5 hasher = MD5.Create();
 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
-			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+pass)))
+			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+password)))
                     sb.Append(b.ToString("x2").ToLower());
 			string hash = sb.ToString();
 			
@@ -99,34 +99,34 @@ namespace front_end
 			bool flag = false;
 			int i = 0;
 			User uTmp = null;
+
 			uTmp = tmpDr.Find( x => x.username().Equals(email));
 			if( uTmp != null ) {
-				flag = uTmp.authenticate(email, pass);
+				flag = uTmp.authenticate(email, password);
 			}
-			
-			for( i = 0; i < tmpDr.Count 
-			  && tmpDr[i].username() != email; ++i );
-			if( i != tmpDr.Count ) {
-				flag = tmpDr[i].authenticate(email, pass);
-				uTmp = tmpDr[i];
+
+			uTmp = tmpDr.Find(x => x.username().Equals(email));
+
+			if( uTmp != null ) {
+				flag = uTmp.authenticate(email, password);
 			}
 			else {
 				for( i = 0; i < tmpDo.Count 
 			      && tmpDo[i].username() != email; ++i );
 				if( i != tmpDo.Count ) {
-					flag = tmpDo[i].authenticate(email, pass);
+					flag = tmpDo[i].authenticate(email, password);
 					uTmp = tmpDo[i];
 				}
 				else {
 					for( i = 0; i < tmpR.Count 
 			    	  && tmpR[i].username() != email; ++i );
 					if( i != tmpR.Count ) {
-						flag = tmpR[i].authenticate(email, pass);
+						flag = tmpR[i].authenticate(email, password);
 						uTmp = tmpR[i];
 					}
 				}
 			}
-			
+
 			//appState["Authenticated"] = flag;
 			if( uTmp == null ) {
 				return new Authen( "", "User Not Found", "User" );
@@ -135,7 +135,7 @@ namespace front_end
 				return new Authen( "", "Password Incorrect", "User" );
 			}
 			else {
-				((Dictionary<String, User>)appState["users"])[hash] = uTmp;
+				((Dictionary<String, User>)appState["users"])[hash] = uTmp; //.Add(hash, uTmp); add throws exception if it already exists
 				return new Authen( hash, "Succesful Authen", uTmp.getRole() );
 			}
 		}
