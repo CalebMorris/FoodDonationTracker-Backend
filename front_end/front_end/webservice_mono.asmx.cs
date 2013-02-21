@@ -21,10 +21,10 @@ namespace front_end
 		protected HttpApplicationState appState;
 		
 		public struct Query {
-			public Status stat;
+			public Status status;
 			public string message;
-			public Query( Status s, string m ) {
-				stat = s;
+			public Query( Status status, string m ) {
+				this.status = status;
 				message = m;
 			}
 		}
@@ -134,7 +134,7 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public Query statusChange( string authenToken, Status s ) {
+		public Query statusChange( string authenToken, Status status ) {
 			//Return status, message
 			//TODO add state change here 
 			//TODO   if state because available, push the next pickup (if available)
@@ -155,7 +155,7 @@ namespace front_end
 			userIsDriver = (i != tmpDr.Count);
 			if( userIsDriver ) {
 				//Authenticated
-				return new Query( tmpDr[i].updateStatus(s), "Status Succesfully Updated" );
+				return new Query( tmpDr[i].updateStatus(status), "Status Succesfully Updated" );
 			}
 			else {
 				return new Query( Status.unauthenticated, "Unauthenticated" );
