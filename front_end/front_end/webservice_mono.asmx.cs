@@ -43,14 +43,14 @@ namespace front_end
 		
 		public struct Authen {
 			//Return status, token, role, message
-			public Status status;
-			public string token;
+			public string status;
+			public string authenToken;
 			public string message;
 			public string role;
 			
 			public Authen( string tok, string mes, string rol ) {
-				token = tok; message = mes; role = rol;
-				status = Status.unavailable;
+				authenToken = tok; message = mes; role = rol;
+				status = "unavailable";//Status.unavailable;
 			}
 		}
 		
