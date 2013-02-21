@@ -17,7 +17,7 @@ namespace front_end
 			Application["donors"] = new List<Donor>();
 			Application["receivers"] = new List<Receiver>();
 			Application["drivers"] = new List<Driver>();
-			Application["users"] = new Dictionary<String, User>();
+			Application["users"] = new Dictionary<String, Tuple<User, String>>();
 		}
 		
 		protected virtual void Session_Start (Object sender, EventArgs e)

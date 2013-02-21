@@ -147,11 +147,11 @@ namespace front_end
 			//TODO   if state because available, push the next pickup (if available)
 			List<Driver> tmpDr = 
 				(List<Driver>)appState["drivers"];
-			Dictionary<String, User> tmpAuthn = 
-				(Dictionary<String, User>)appState["users"];
+			Dictionary<String, Tuple<User, String>> tmpAuthn = 
+				(Dictionary<String, Tuple<User, String>>)appState["users"];
 			User uTmp = null;
 			if( tmpAuthn.ContainsKey(authenToken) ) {
-				uTmp = tmpAuthn[authenToken];
+				uTmp = tmpAuthn[authenToken].Item1;
 			}
 			else {
 				return new Query( "error", "Authen Token Not Recognized");				
@@ -178,7 +178,20 @@ namespace front_end
 		[WebMethod]
 		public bool GCMRegister( string regId ) {
 			//@TODO Implement
-			return false; //Failure condition
+			Dictionary<String, Tuple<User, String>> users = (Dictionary<String, Tuple<User,String>>)Application["users"];
+			if( Application["users"] == null ) {
+				//There aren't any users
+				Application["users"] = new Dictionary<String, Tuple<User,String>>();
+				return false;
+			}
+			if( !users.ContainsKey(authenToken) ) {
+				//Token doesn't exists
+				return false;
+			}
+			
+			User uTmp = users[authenToken].Item1;
+			users[authenToken] = new Tuple<User, String>(uTmp, regId);
+			return true;
 		}
 		
 		[WebMethod]
@@ -186,11 +199,11 @@ namespace front_end
 			//Return status, message
 			List<Driver> tmpDr = 
 				(List<Driver>)appState["drivers"];
-			Dictionary<String, User> tmpAuthn = 
-				(Dictionary<String, User>)appState["users"];
+			Dictionary<String, Tuple<User, String>> tmpAuthn = 
+				(Dictionary<String, Tuple<User,String>>)appState["users"];
 			User uTmp = null;
 			if( tmpAuthn.ContainsKey(authenToken) ) {
-				uTmp = tmpAuthn[authenToken];
+				uTmp = tmpAuthn[authenToken].Item1;
 			}
 			else{
 				return new Query( "error", "Authen Token Not Recognized");	
