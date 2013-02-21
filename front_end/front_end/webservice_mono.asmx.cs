@@ -214,6 +214,14 @@ namespace front_end
 			return new Donation("","","",1,1,"","","",1,1,"");
 		}		
 		
+		[WebMethod]
+		public bool submitDonation( string upName, string upPhone, string upDetails, int upLat, int upLon,
+			                 string dName, string dPhone, string dDetails, int dLat, int dLon,
+			                 string message ) {
+			//@TODO implement
+			return false;
+		}
+		
 		/* Debugging Methods */
 
 		[WebMethod]
