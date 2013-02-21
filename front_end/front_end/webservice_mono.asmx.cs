@@ -47,10 +47,12 @@ namespace front_end
 			public string authenToken;
 			public string message;
 			public string role;
+			public int expiry;
 			
 			public Authen( string tok, string mes, string rol ) {
 				authenToken = tok; message = mes; role = rol;
 				status = "unavailable";//Status.unavailable;
+				expiry = 0;
 			}
 		}
 		
