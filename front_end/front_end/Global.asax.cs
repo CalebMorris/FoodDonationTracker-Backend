@@ -15,16 +15,13 @@ namespace front_end
 		protected virtual void Application_Start (Object sender, EventArgs e)
 		{
 			Application["donors"] = new List<Donor>();
-			((List<Donor>)Application["donors"]).Add(new Donor("donor","pass",new GPS(1,2),0.0));
 			Application["receivers"] = new List<Receiver>();
 			Application["drivers"] = new List<Driver>();
-			((List<Driver>)Application["drivers"]).Add(new Driver("driver","pass", new GPS(1,1)));
 			Application["users"] = new Dictionary<String, User>();
 		}
 		
 		protected virtual void Session_Start (Object sender, EventArgs e)
 		{
-			Application["Authenticated"] = false;
 		}
 		
 		protected virtual void Application_BeginRequest (Object sender, EventArgs e)
