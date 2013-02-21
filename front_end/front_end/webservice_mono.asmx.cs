@@ -16,10 +16,10 @@ namespace front_end
 		protected HttpApplicationState appState;
 		
 		public struct Query {
-			public Status stat;
+			public Status status;
 			public string message;
 			public Query( Status s, string m ) {
-				stat = s;
+				status = s;
 				message = m;
 			}
 		}
@@ -39,13 +39,15 @@ namespace front_end
 		public struct Authen {
 			//Return status, token, role, message
 			public Status status;
-			public string token;
+			public string authenToken;
 			public string message;
 			public string role;
+			public int expiry;
 			
 			public Authen( string tok, string mes, string rol ) {
-				token = tok; message = mes; role = rol;
+				authenToken = tok; message = mes; role = rol;
 				status = Status.unavailable;
+				expiry = 0;
 			}
 		}
 		
@@ -100,59 +102,59 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public int writeDriver( string user, string pass ) {
+		public int writeDriver( string email, string password) {
 			
 			if( appState["donors"] == null ) {
 				appState["donors"] = new List<Donor>();
 			}
 			for( int i = 0; i < ((List<Driver>)appState["drivers"]).Count; ++i ) {
-				if( user == ((List<Driver>)appState["drivers"])[i].username() ) {
+				if( email == ((List<Driver>)appState["drivers"])[i].username() ) {
 					return -1;
 				}
 			}
-			((List<Driver>)appState["drivers"]).Add( new Driver( user, pass, new GPS(33.71,141.13) ));
+			((List<Driver>)appState["drivers"]).Add( new Driver( email, password, new GPS(33.71,141.13) ));
 			
 			return 1;
 		}
 		
 		[WebMethod]
-		public int writeDonor( string user, string pass, GPS location, double ttl ) {
+		public int writeDonor( string email, string password, GPS location, double ttl ) {
 			
 			if( appState["drivers"] == null ) {
 				appState["drivers"] = new List<Driver>();
 			}
 			for( int i = 0; i < ((List<Donor>)appState["donors"]).Count; ++i ) {
-				if( user == ((List<Donor>)appState["donors"])[i].username() ) {
+				if( email == ((List<Donor>)appState["donors"])[i].username() ) {
 					return -1;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, location, ttl ));
+			((List<Donor>)appState["donors"]).Add( new Donor( email, password, location, ttl ));
 			
 			return 1;
 		}
 		
 		[WebMethod]
-		public int writeReceiver( string user, string pass, GPS location ) {
+		public int writeReceiver( string email, string password, GPS location ) {
 			
 			if( appState["receivers"] == null ) {
 				appState["receivers"] = new List<Receiver>();
 			}
 			for( int i = 0; i < ((List<Receiver>)appState["receivers"]).Count; ++i ) {
-				if( user == ((List<Receiver>)appState["receivers"])[i].username() ) {
+				if( email == ((List<Receiver>)appState["receivers"])[i].username() ) {
 					return -1;
 				}
 			}
-			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass,  location ));
+			((List<Receiver>)appState["receivers"]).Add( new Receiver( email, password,  location ));
 			
 			return 1;
 		}
 		
 		[WebMethod]
-		public Authen authenticateUser( string email, string pass ) {
+		public Authen authenticateUser( string email, string password ) {
 			//Return status, token, role, message
 			MD5 hasher = MD5.Create();
 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
-			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+pass)))
+			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+password)))
                     sb.Append(b.ToString("x2").ToLower());
 			string hash = sb.ToString();
 			
@@ -166,21 +168,21 @@ namespace front_end
 			for( i = 0; i < tmpDr.Count 
 			  && tmpDr[i].username() != email; ++i );
 			if( i != tmpDr.Count ) {
-				flag = tmpDr[i].authenticate(email, pass);
+				flag = tmpDr[i].authenticate(email, password);
 				uTmp = tmpDr[i];
 			}
 			else {
 				for( i = 0; i < tmpDo.Count 
 			      && tmpDo[i].username() != email; ++i );
 				if( i != tmpDo.Count ) {
-					flag = tmpDo[i].authenticate(email, pass);
+					flag = tmpDo[i].authenticate(email, password);
 					uTmp = tmpDo[i];
 				}
 				else {
 					for( i = 0; i < tmpR.Count 
 			    	  && tmpR[i].username() != email; ++i );
 					if( i != tmpR.Count ) {
-						flag = tmpR[i].authenticate(email, pass);
+						flag = tmpR[i].authenticate(email, password);
 						uTmp = tmpR[i];
 					}
 				}
@@ -205,7 +207,7 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public Query statusChange( string authenToken, Status s ) {
+		public Query statusChange( string authenToken, Status status ) {
 			//Return status, message
 			//TODO add state change here 
 			//TODO   if state because available, push the next pickup (if available)
@@ -226,7 +228,7 @@ namespace front_end
 			userIsDriver = (i != tmpDr.Count);
 			if( userIsDriver ) {
 				//Authenticated
-				return new Query( tmpDr[i].updateStatus(s), "Status Succesfully Updated" );
+				return new Query( tmpDr[i].updateStatus(status), "Status Succesfully Updated" );
 			}
 			else {
 				return new Query( Status.unauthenticated, "Unauthenticated" );
