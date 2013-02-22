@@ -26,9 +26,17 @@ namespace back_end
 			return status; 
 		}
 		public void assignPickup( Donor donor ) {
-			if( donor != null ) {
+			if( donor != default(Donor) ) {
 				status = "assigned";
 				pickup = donor;
+			}
+			else {
+				//TODO throw error				
+			}
+		}
+		public void assignDropoff( Receiver reciever ) {
+			if( reciever != default(Receiver) ) {
+				dropoff = reciever;
 			}
 			else {
 				//TODO throw error				
