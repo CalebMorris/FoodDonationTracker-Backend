@@ -148,8 +148,19 @@ namespace front_end
 		
 		[WebMethod]
 		public bool locationUpdate( string authenToken, int latitude, int longitude ) {
-			//@TODO implement
-			return false;//Failure
+			/* Updates the location of a user with matching authenToken */ 
+			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
+			if (users == null) {
+				users = new Dictionary<string, Tuple<User, string>> ();
+				return false;
+			}
+			if (!users.ContainsKey (authenToken)) {
+				return false;
+			}
+			User uTmp = users[authenToken].Item1;
+			uTmp.updateLoc(new GPS(latitude, longitude));
+			
+			return true;
 		}
 		
 		[WebMethod]
@@ -198,10 +209,25 @@ namespace front_end
 		
 		[WebMethod]
 		public Donation queryDonation( string authenToken ) {
-			//@TODO implement
-			
-			
-			return new Donation("","","",1,1,"","","",1,1,"");
+			/* Retrieves information of donation 
+			 * @TODO is authenToken the driver and gets assigned don
+			  * or the donor?*/
+			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
+			if (users == null) {
+				users = new Dictionary<string, Tuple<User, string>> ();
+				return default(Donation);
+			}
+			if (!users.ContainsKey (authenToken)) {
+				return default(Donation);
+			}
+			User uTmp = users[authenToken].Item1;
+			if( uTmp.getRole() == "Driver" ) {
+				return ((Driver)uTmp).getPickup().donation;
+			}
+			else if( uTmp.getRole() == "Donor" ) {
+				return ((Donor)uTmp).donation;
+			}
+			else return default(Donation);
 		}		
 		
 		[WebMethod]
