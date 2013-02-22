@@ -5,7 +5,7 @@ namespace back_end
 	public struct Donation {
 		public string 	pickupContactName;
 		public string 	pickupContactPhone;
-		public string 	pickExtraDetails;
+		public string 	pickupExtraDetails;
 		public int 		pickupLatitude;
 		public int 		pickupLongitude;
 		public string 	dropoffContactName;
