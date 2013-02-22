@@ -15,12 +15,13 @@ namespace front_end
 		protected virtual void Application_Start (Object sender, EventArgs e)
 		{
 			Application["donors"] = new List<Donor>();
-			((List<Donor>)Application["donors"]).Add(new Donor("donor","pass",new GPS(2,2), 100.0));
+			((List<Donor>)Application["donors"]).Add(new Donor("donor","pass",new GPS(2,2), 100));
 			Application["receivers"] = new List<Receiver>();
 			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver","pass",new GPS(3,3),"","",""));
 			Application["drivers"] = new List<Driver>();
 			((List<Driver>)Application["drivers"]).Add(new Driver("driver","pass", new GPS(1,1)));
 			Application["users"] = new Dictionary<String, Tuple<User, String>>();
+			Application["activeDonations"] = new List<Donor>();
 		}
 		
 		protected virtual void Session_Start (Object sender, EventArgs e)

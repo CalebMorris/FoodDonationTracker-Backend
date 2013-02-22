@@ -144,6 +144,9 @@ namespace front_end
 		[WebMethod]
 		public Query statusChange( string authenToken, string status ) {
 			//Return status, message
+			//@TODO push state on change
+				// from assigned to available
+				// from unavailable to available
 			List<Driver> tmpDr = 
 				(List<Driver>)appState["drivers"];
 			Dictionary<String, Tuple<User, String>> tmpAuthn = 
@@ -270,7 +273,6 @@ namespace front_end
 			User uTmp = users[authenToken].Item1;
 			
 			if( uTmp.getRole() == "Donor" ) {
-				//@TODO push state machine and push donation to driver
 				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
 		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
 				
