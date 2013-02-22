@@ -323,7 +323,7 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public bool writeDonor( string user, string pass ) {
+		public bool writeDonor( string user, string pass, int lat, int lon ) {
 			
 			if( appState["donors"] == null ) {
 				appState["donors"] = new List<Donor>();
@@ -333,13 +333,13 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, new GPS(1,1), /*ttl*/0.0 ));
+			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, new GPS(lat,lon), /*ttl*/0.0 ));
 			
 			return true;
 		}
 		
 		[WebMethod]
-		public bool writeReceiver( string user, string pass ) {
+		public bool writeReceiver( string user, string pass, int lat, int lon ) {
 			
 			if( appState["receivers"] == null ) {
 				appState["receivers"] = new List<Receiver>();
@@ -349,7 +349,7 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass, new GPS(1,1) ));
+			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass, new GPS(lat,lon) ));
 			
 			return true;
 		}
