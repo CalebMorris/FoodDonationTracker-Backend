@@ -56,6 +56,30 @@ namespace front_end
 			}
 		}
 		
+		public struct Transfer {
+			public string 	pickupContactName;
+			public string 	pickupContactPhone;
+			public string 	pickupExtraDetails;
+			public int 		pickupLatitude;
+			public int 		pickupLongitude;
+			public string	dropoffContactName;
+			public string	dropoffContactPhone;
+			public string	dropoffExtraDetails;
+			public int		dropoffLatitude;
+			public int		dropoffLongitude;
+			public string 	message;
+			
+			public Transfer( string upName, string upPhone, string upDetails, int upLat, int upLon,
+			                 string dName, string dPhone, string dDetails, int dLat, int dLon,
+			                 string message) {
+				pickupContactName = upName; pickupContactPhone = upPhone; 
+				pickupExtraDetails = upDetails;
+				pickupLatitude = upLat; pickupLongitude = upLon;
+				dropoffContactName = dName; dropoffContactPhone = dPhone; dropoffExtraDetails = dDetails;
+				dropoffLatitude = dLat; dropoffLongitude = dLon; this.message = message;
+			}
+		}
+		
 		[WebMethod]
 		public Authen authenticateUser( string email, string password ) {
 			//Return status, token, role, message
@@ -207,26 +231,28 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public Donation queryDonation( string authenToken ) {
-			/* Retrieves information of donation 
-			 * @TODO is authenToken the driver and gets assigned don
-			  * or the donor?*/
+		public Transfer queryDonation( string authenToken ) {
+			/* Retrieves information of donation */
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
 			if (users == null) {
 				users = new Dictionary<string, Tuple<User, string>> ();
-				return default(Donation);
+				return default(Transfer);
 			}
 			if (!users.ContainsKey (authenToken)) {
-				return default(Donation);
+				return default(Transfer);
 			}
 			User uTmp = users[authenToken].Item1;
 			if( uTmp.getRole() == "Driver" ) {
-				return ((Driver)uTmp).getPickup().donation;
+				/* Need to return both donor and dropoff info */
+				Donation tDon = ((Driver)uTmp).getPickup().donation;
+				Receiver tDrop = ((Driver)uTmp).getDropoff();
+				return new Transfer(tDon.pickupContactName, tDon.pickupContactPhone,
+				  tDon.pickupExtraDetails, tDon.pickupLatitude, tDon.pickupLongitude,
+				  tDrop.contactName, tDrop.contactPhone, tDrop.extraDetails, 
+				  tDrop.location.getLatI(), tDrop.location.getLonI(), "");
+				                    
 			}
-			else if( uTmp.getRole() == "Donor" ) {
-				return ((Donor)uTmp).donation;
-			}
-			else return default(Donation);
+			else return default(Transfer);
 		}		
 		
 		[WebMethod]
@@ -339,7 +365,9 @@ namespace front_end
 		}
 		
 		[WebMethod]
-		public bool writeReceiver( string user, string pass, int lat, int lon ) {
+		public bool writeReceiver( string user, string pass, int lat, int lon,
+		                           string contactName, string contactPhone,
+		                           string extraDetails ) {
 			
 			if( appState["receivers"] == null ) {
 				appState["receivers"] = new List<Receiver>();
@@ -349,7 +377,8 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Receiver>)appState["receivers"]).Add( new Receiver( user, pass, new GPS(lat,lon) ));
+			((List<Receiver>)appState["receivers"]).Add( 
+					new Receiver( user, pass, new GPS(lat,lon), contactName, contactPhone, extraDetails ));
 			
 			return true;
 		}
