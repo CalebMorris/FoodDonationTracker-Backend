@@ -230,9 +230,8 @@ namespace front_end
 		}		
 		
 		[WebMethod]
-		public bool submitDonation( string upName, string upPhone, string upDetails, int upLat, int upLon,
-			                 string dName, string dPhone, string dDetails, int dLat, int dLon,
-			                 string message ) {
+		public bool submitDonation( string upName, string upPhone, 
+		                     string upDetails, int upLat, int upLon ) {
 			//@TODO implement
 			return false;
 		}

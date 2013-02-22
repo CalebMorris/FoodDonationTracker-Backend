@@ -8,21 +8,12 @@ namespace back_end
 		public string 	pickupExtraDetails;
 		public int 		pickupLatitude;
 		public int 		pickupLongitude;
-		public string 	dropoffContactName;
-		public string 	dropoffContactPhone;
-		public string 	dropoffContactExtraDetails;
-		public int 		dropoffLatitude;
-		public int 		dropoffLongitude;
-		public string 	message;
 		
-		public Donation( string upName, string upPhone, string upDetails, int upLat, int upLon,
-		                 string dName, string dPhone, string dDetails, int dLat, int dLon,
-		                 string message ) {
-			pickupContactName = upName; pickupContactPhone = upPhone; pickExtraDetails = upDetails;
+		public Donation( string upName, string upPhone, 
+		                string upDetails, int upLat, int upLon ) {
+			pickupContactName = upName; pickupContactPhone = upPhone; 
+			pickupExtraDetails = upDetails;
 			pickupLatitude = upLat; pickupLongitude = upLon;
-			dropoffContactName = dName; dropoffContactPhone = dPhone; dropoffContactExtraDetails = dDetails;
-			dropoffLatitude = dLat; dropoffLongitude = dLon;
-			this.message = message;
 		}
 	}
 		
