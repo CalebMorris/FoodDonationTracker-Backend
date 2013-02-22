@@ -18,6 +18,8 @@ namespace back_end
 		
 		public double getLat() { return latitude; }
 		public double getLon() { return longitude; }
+		public int getLatI() { return (int)(latitude/1000000); }
+		public int getLonI() { return (int)(longitude/1000000); }
 		public void setLat( double lat ) { latitude = lat; }
 		public void setLon( double lon ) { longitude = lon; }
 		
