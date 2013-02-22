@@ -25,13 +25,11 @@ namespace back_end
 		*/
 		public GPS getLoc() { return location; }
 		
-		public void updateLoc( double lat, double lon ) { 
-			location = new GPS(lat, lon);
+		public void updateLoc( GPS loc ) { 
+			location = loc;
 		}
 		
 		public string getRole() { return role; }
-		
-		public void updateLoc( GPS loc ) { location = loc; }
 		
 		public void changePass( string pOld, string pNew ) {
 			if (pOld == uPass) {
