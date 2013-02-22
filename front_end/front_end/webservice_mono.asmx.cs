@@ -120,8 +120,6 @@ namespace front_end
 		[WebMethod]
 		public Query statusChange( string authenToken, string status ) {
 			//Return status, message
-			//TODO add state change here 
-			//TODO   if state because available, push the next pickup (if available)
 			List<Driver> tmpDr = 
 				(List<Driver>)appState["drivers"];
 			Dictionary<String, Tuple<User, String>> tmpAuthn = 
@@ -139,6 +137,7 @@ namespace front_end
 			userIsDriver = (i != tmpDr.Count);
 			if( userIsDriver ) {
 				//Authenticated
+				//@TODO if state becomes available, push the next pickup (if available)
 				return new Query( tmpDr[i].updateStatus(status), "Status Succesfully Updated" );
 			}
 			else {
