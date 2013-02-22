@@ -2,11 +2,36 @@ using System;
 
 namespace back_end
 {
+	public struct Donation {
+		public string 	pickupContactName;
+		public string 	pickupContactPhone;
+		public string 	pickExtraDetails;
+		public int 		pickupLatitude;
+		public int 		pickupLongitude;
+		public string 	dropoffContactName;
+		public string 	dropoffContactPhone;
+		public string 	dropoffContactExtraDetails;
+		public int 		dropoffLatitude;
+		public int 		dropoffLongitude;
+		public string 	message;
+		
+		public Donation( string upName, string upPhone, string upDetails, int upLat, int upLon,
+		                 string dName, string dPhone, string dDetails, int dLat, int dLon,
+		                 string message ) {
+			pickupContactName = upName; pickupContactPhone = upPhone; pickExtraDetails = upDetails;
+			pickupLatitude = upLat; pickupLongitude = upLon;
+			dropoffContactName = dName; dropoffContactPhone = dPhone; dropoffContactExtraDetails = dDetails;
+			dropoffLatitude = dLat; dropoffLongitude = dLon;
+			this.message = message;
+		}
+	}
+		
 	public class Donor : User
 	{
 		//TODO add food type 
 		public double ttl; // time until food expires in seconds
 		public TimeSpan lastCheck;
+		public Donation donation;
 		
 		public Donor ():base("","","Donor",null) {
 			lastCheck = DateTime.Now.TimeOfDay;
