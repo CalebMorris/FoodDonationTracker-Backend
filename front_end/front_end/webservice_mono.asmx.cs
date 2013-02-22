@@ -236,6 +236,10 @@ namespace front_end
 		[WebMethod]
 		public Transfer queryDonation( string authenToken ) {
 			/* Retrieves information of donation */
+			//@TODO dummy return
+			return new Transfer("Caleb", "480-123-4567", "Use the doorbell", 
+			           03342743, 11202000, "Michael", "602-987-6543", "Don't fall into the valcano",
+			           03200000, 11210000, "Test Transfer");
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
 			if (users == null) {
 				users = new Dictionary<string, Tuple<User, string>> ();
