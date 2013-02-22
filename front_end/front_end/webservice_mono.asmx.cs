@@ -135,7 +135,7 @@ namespace front_end
 				return new Authen( "", "Password Incorrect", "User" );
 			}
 			else {
-				
+				uTmp.authToken = hash;
 				((Dictionary<String, Tuple<User,String>>)appState["users"])[hash] = new Tuple<User,String>(uTmp, "");
 				return new Authen( hash, "Succesful Authen", uTmp.getRole() );
 			}
@@ -274,7 +274,25 @@ namespace front_end
 				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
 		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
 				
-				
+				Driver driver = ((Donor)uTmp).findBestDriver( ((List<Driver>)appState["drivers"]).ToArray() );
+				if( driver != default(Driver) ) {
+					// There is at least one driver available
+					Receiver dropoff = ((Donor)uTmp).findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
+					if( dropoff != default(Receiver) ) {
+						// There is at least one reciever
+						//@TODO push notification to app
+						driver.assignPickup((Donor)uTmp);
+						driver.assignDropoff(dropoff);
+						testPush(driver.authToken,"Donation Available");
+					}
+					else {
+						// No drop-off. what do?
+						//@TODO ???
+					}
+				}
+				else {
+					((List<Donor>)appState["activeDonations"]).Add((Donor)uTmp);
+				}
 				
 				return true;
 			}

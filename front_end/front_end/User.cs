@@ -8,7 +8,7 @@ namespace back_end
 		string uPass; //TODO CHANGE THIS
 		string role;
 		public GPS location;
-		
+		public string authToken;
 		
 		public User () { uName = ""; uPass = ""; 
 			role = ""; location = null; }
