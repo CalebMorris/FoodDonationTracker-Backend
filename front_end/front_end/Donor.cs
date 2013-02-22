@@ -23,18 +23,37 @@ namespace back_end
 		public double ttl; // time until food expires in seconds
 		public TimeSpan lastCheck;
 		public Donation donation;
+		public string status;
 		
 		public Donor ():base("","","Donor",null) {
 			lastCheck = DateTime.Now.TimeOfDay;
+			status = "empty";
 		}
 		public Donor( string uname, string upass, GPS loc, double timetolive ) 
 				: base(uname, upass, "Donor", loc ) {
 			lastCheck = DateTime.Now.TimeOfDay;
+			status = "empty";
 		}
 		
 		public Receiver findBestDropOff( Receiver[] receivers ) {
 			if( receivers.Length == 0 ) {
-				return null;
+				return default(Receiver);
+			}
+			int best = 0;
+			double currentDist = this.location.difference(receivers[0].location);
+			for( int i = 0; i < receivers.Length; ++i ) {
+				double tmp = this.location.difference(receivers[i].location);
+				if( tmp < currentDist ) {
+					best = i;
+					currentDist = tmp;
+				}
+			}
+			return receivers[best];
+		}
+		
+		public Driver findBestDriver( Driver[] receivers ) {
+			if( receivers.Length == 0 ) {
+				return default(Driver);
 			}
 			int best = 0;
 			double currentDist = this.location.difference(receivers[0].location);
@@ -60,6 +79,10 @@ namespace back_end
 			else{
 				return 1;
 			}
+		}
+		
+		public void addDonation( Donation donation ) {
+			this.donation = donation;
 		}
 	}
 }
