@@ -10,10 +10,7 @@ namespace front_end
 		public Pusher () {}
 		
 		public static string SendNotification(string deviceId, string message) {
-			deviceId = "APA91bF7QrhCcjwXKNiXB9HOMnBJA8CEdWemgPCzEl7j5Uvd0RQrIs4iAF2oPE4houHibikUs8Mvgb0Dvt_RgWcOcRsMnI2kpgTdnL1iAtnqFSkH69Ryj4X71dBQ-MOPZZkg4iXzuc99-oHO-PEoanNlNl7Oh3zuAA";
-			message = "test";
 			string GoogleAppID = "AIzaSyBlcyCnxYJNfk5mF4sfzcOt6q2j5S_wQRI";
-			//var SENDER_ID = "89910554410";
 			var value = message;
 			WebRequest tRequest;
 			tRequest = WebRequest.Create("https://android.googleapis.com/gcm/send");
