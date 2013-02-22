@@ -259,16 +259,16 @@ namespace front_end
 		}		
 		
 		[WebMethod]
-		public bool submitDonation( string authenToken, string pickupContactName, string pickupContactPhone, 
+		public string submitDonation( string authenToken, string pickupContactName, string pickupContactPhone, 
 		                     string pickupExtraDetails, int pickupLatitude, int pickupLongitude ) {
 			//@TODO implement
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
 			if (users == null) {
 				users = new Dictionary<string, Tuple<User, string>> ();
-				return false;
+				return "No Users";
 			}
 			if (!users.ContainsKey (authenToken)) {
-				return false;
+				return "User Doesn't Exist";
 			}
 			User uTmp = users[authenToken].Item1;
 			
@@ -289,16 +289,16 @@ namespace front_end
 					else {
 						// No drop-off. what do?
 						//@TODO ???
+						return "User is empty?";
 					}
 				}
 				else {
 					((List<Donor>)appState["activeDonations"]).Add((Donor)uTmp);
 				}
-				
-				return true;
+				return "success";
 			}
 			else {
-				return false;
+				return "Donating as a non-Donator";
 			}
 		}
 		
