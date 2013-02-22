@@ -230,10 +230,31 @@ namespace front_end
 		}		
 		
 		[WebMethod]
-		public bool submitDonation( string upName, string upPhone, 
-		                     string upDetails, int upLat, int upLon ) {
+		public bool submitDonation( string authenToken, string pickupContactName, string pickupContactPhone, 
+		                     string pickupExtraDetails, int pickupLatitude, int pickupLongitude ) {
 			//@TODO implement
-			return false;
+			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
+			if (users == null) {
+				users = new Dictionary<string, Tuple<User, string>> ();
+				return false;
+			}
+			if (!users.ContainsKey (authenToken)) {
+				return false;
+			}
+			User uTmp = users[authenToken].Item1;
+			
+			if( uTmp.getRole() == "Donor" ) {
+				//@TODO push state machine and push donation to driver
+				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
+		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
+				
+				
+				
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		
 		/* Debugging Methods */
