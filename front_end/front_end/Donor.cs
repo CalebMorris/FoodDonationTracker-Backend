@@ -19,8 +19,7 @@ namespace back_end
 		
 	public class Donor : User
 	{
-		//TODO add food type 
-		public double ttl; // time until food expires in seconds
+		public int ttl; // time until food expires in seconds
 		public TimeSpan lastCheck;
 		public Donation donation;
 		public string status;
@@ -29,7 +28,7 @@ namespace back_end
 			lastCheck = DateTime.Now.TimeOfDay;
 			status = "empty";
 		}
-		public Donor( string uname, string upass, GPS loc, double timetolive ) 
+		public Donor( string uname, string upass, GPS loc, int timetolive ) 
 				: base(uname, upass, "Donor", loc ) {
 			lastCheck = DateTime.Now.TimeOfDay;
 			status = "empty";
@@ -72,7 +71,7 @@ namespace back_end
 			// If the ttl is reached 0 or less return -1 
 			//   and send message that time has expired
 			lastCheck = (DateTime.Now.TimeOfDay - this.lastCheck);
-			ttl -= lastCheck.TotalSeconds;
+			ttl -= (int)lastCheck.TotalSeconds;
 			if( ttl <= 0 ) {
 				return -1;
 			}

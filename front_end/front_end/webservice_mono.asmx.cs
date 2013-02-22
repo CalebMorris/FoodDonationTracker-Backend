@@ -377,7 +377,7 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, new GPS(lat,lon), /*ttl*/0.0 ));
+			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, new GPS(lat,lon), 100 ));
 			
 			return true;
 		}
