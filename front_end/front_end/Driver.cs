@@ -31,7 +31,7 @@ namespace back_end
 				pickup = donor;
 			}
 			else {
-				//TODO throw error				
+				// throw error				
 			}
 		}
 		public void assignDropoff( Receiver reciever ) {
@@ -39,7 +39,7 @@ namespace back_end
 				dropoff = reciever;
 			}
 			else {
-				//TODO throw error				
+				// throw error				
 			}
 		}
 		

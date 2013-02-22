@@ -282,7 +282,6 @@ namespace front_end
 					Receiver dropoff = ((Donor)uTmp).findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
 					if( dropoff != default(Receiver) ) {
 						// There is at least one reciever
-						//@TODO push notification to app
 						driver.assignPickup((Donor)uTmp);
 						driver.assignDropoff(dropoff);
 						testPush(driver.authToken,"Donation Available");
