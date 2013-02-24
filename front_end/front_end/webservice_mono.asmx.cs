@@ -166,22 +166,25 @@ namespace front_end
 				//Authenticated
 				//@TODO if state becomes available, push the next pickup (if available)
 				
-				List<Donor> donations = ((List<Donor>)appState["activeDonations"]);
+				if(status == "available") {
 				
-				if( donations != null && donations.Count > 0 ) {
-					Donor nextDonor = donations[0];
-					Driver driver = (Driver)uTmp;
-					Receiver dropoff = nextDonor.findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
-					if( dropoff != default(Receiver) ) {
-						// There is at least one reciever
-						driver.assignPickup((Donor)uTmp);
-						driver.assignDropoff(dropoff);
-						testPush(driver.authToken,"Donation Available");
-					}
-					else {
-						// No drop-off. what do?
-						//@TODO ???
-						return new Query("error", "User is empty?");
+					List<Donor> donations = ((List<Donor>)appState["activeDonations"]);
+					
+					if( donations != null && donations.Count > 0 ) {
+						Donor nextDonor = donations[0];
+						Driver driver = (Driver)uTmp;
+						Receiver dropoff = nextDonor.findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
+						if( dropoff != default(Receiver) ) {
+							// There is at least one reciever
+							driver.assignPickup((Donor)uTmp);
+							driver.assignDropoff(dropoff);
+							testPush(driver.authToken,"Donation Available");
+						}
+						else {
+							// No drop-off. what do?
+							//@TODO ???
+							return new Query("error", "User is empty?");
+						}
 					}
 				}
 				

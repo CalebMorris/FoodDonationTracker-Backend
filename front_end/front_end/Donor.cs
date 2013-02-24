@@ -50,20 +50,25 @@ namespace back_end
 			return receivers[best];
 		}
 		
-		public Driver findBestDriver( Driver[] receivers ) {
-			if( receivers.Length == 0 ) {
+		public Driver findBestDriver( Driver[] drivers ) {
+			if( drivers.Length == 0 ) {
 				return default(Driver);
 			}
-			int best = 0;
-			double currentDist = this.location.difference(receivers[0].location);
-			for( int i = 0; i < receivers.Length; ++i ) {
-				double tmp = this.location.difference(receivers[i].location);
-				if( tmp < currentDist ) {
+			int best = -1;
+			double currentDist = Double.MaxValue;
+			for( int i = 0; i < drivers.Length; ++i ) {
+				double tmp = this.location.difference(drivers[i].location);
+				if( drivers[i].getStatus() == "available" && tmp < currentDist ) {
 					best = i;
 					currentDist = tmp;
 				}
 			}
-			return receivers[best];
+			if( best > -1 ) {
+				return drivers[best];
+			}
+			else {
+				return default(Driver);
+			}
 		}
 		
 		public int timeLeft() {
