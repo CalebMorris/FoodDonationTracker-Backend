@@ -168,7 +168,7 @@ namespace front_end
 						Receiver dropoff = nextDonor.findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
 						if( dropoff != default(Receiver) ) {
 							// There is at least one reciever
-							driver.assignPickup((Donor)uTmp);
+							driver.assignPickup(nextDonor);
 							driver.assignDropoff(dropoff);
 							testPush(driver.authToken,"Donation Available");
 						}
