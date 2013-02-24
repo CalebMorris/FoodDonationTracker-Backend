@@ -238,8 +238,8 @@ namespace front_end
 			/* Retrieves information of donation */
 			//@TODO dummy return
 			return new Transfer("Caleb", "480-123-4567", "Use the doorbell", 
-			           033427430, -112020000, "Michael", "602-987-6543", "Don't fall into the valcano",
-			           032000000, -112100000, "Test Transfer");
+			           033419084, -111938109, "Michael", "602-987-6543", "Don't fall into the valcano",
+			           033419505, -111912800, "Test Transfer");
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
 			if (users == null) {
 				users = new Dictionary<string, Tuple<User, string>> ();
