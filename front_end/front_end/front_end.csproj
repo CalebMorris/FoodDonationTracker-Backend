@@ -70,8 +70,8 @@
       <Properties VerifyCodeBehindFields="True" VerifyCodeBehindEvents="True">
         <XspParameters Port="8000" Address="192.168.1.100" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
         <WebDeployTargets>
-          <Target Name="test">
-            <FileCopier Handler="MonoDevelop.Deployment.LocalFileCopyHandler" TargetDirectory="C:\inetpub\wwwroot\test" ctype="LocalFileCopyConfiguration" />
+          <Target Name="FF">
+            <FileCopier Handler="MonoDevelop.Deployment.LocalFileCopyHandler" TargetDirectory="C:\inetpub\wwwroot\FF" ctype="LocalFileCopyConfiguration" />
           </Target>
         </WebDeployTargets>
       </Properties>
