@@ -145,10 +145,6 @@ namespace front_end
 		public Query statusChange( string authenToken, string status ) {
 			//Return status, message
 			//@TODO push state on change
-				// from assigned to available
-				// from unavailable to available
-			List<Driver> tmpDr = 
-				(List<Driver>)appState["drivers"];
 			Dictionary<String, Tuple<User, String>> tmpAuthn = 
 				(Dictionary<String, Tuple<User, String>>)appState["users"];
 			User uTmp = null;
@@ -158,11 +154,7 @@ namespace front_end
 			else {
 				return new Query( "error", "Authen Token Not Recognized");				
 			}
-			bool userIsDriver = false;
-			int i;
-			for( i = 0; i < tmpDr.Count && uTmp.username() != tmpDr[i].username(); ++i );
-			userIsDriver = (i != tmpDr.Count);
-			if( userIsDriver ) {
+			if( uTmp.getRole() == "Driver" ) {
 				//Authenticated
 				//@TODO if state becomes available, push the next pickup (if available)
 				
@@ -188,7 +180,7 @@ namespace front_end
 					}
 				}
 				
-				return new Query( tmpDr[i].updateStatus(status), "Status Succesfully Updated" );
+				return new Query( ((Driver)uTmp).updateStatus(status), "Status Succesfully Updated" );
 			}
 			else {
 				return new Query( "unauthenticated", "Unauthenticated" );
