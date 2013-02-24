@@ -321,8 +321,9 @@ namespace front_end
 				}
 				else {
 					((List<Donor>)appState["activeDonations"]).Add((Donor)uTmp);
+					return "No Driver Available"
 				}
-				return "success";
+				return "Pushing Donation";
 			}
 			else {
 				return "Donating as a non-Donator";
