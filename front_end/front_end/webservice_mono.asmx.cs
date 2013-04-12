@@ -478,7 +478,7 @@ namespace front_end
 		public string printQueue() {
 			//TODO Call the donation queue print
 			
-			Queue_t<Donation> queue = (Queue_t<Donation>)Application["queue"];
+			Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 			if( queue == null) {
 				return "The Queue is empty.";
 			}
