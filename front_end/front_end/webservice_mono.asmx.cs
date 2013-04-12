@@ -479,7 +479,12 @@ namespace front_end
 			//TODO Call the donation queue print
 			
 			Queue_t<Donation> queue = (Queue_t<Donation>)Application["queue"];
-			return queue.toString();
+			if( queue == default(Queue_t<Donation>)) {
+				return "The Queue is empty.";
+			}
+			else {
+				return queue.toString();
+			}
 		}
 		
 		[WebMethod]
