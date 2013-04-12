@@ -479,7 +479,7 @@ namespace front_end
 			//TODO Call the donation queue print
 			
 			Queue_t<Donation> queue = (Queue_t<Donation>)Application["queue"];
-			if( queue == default(Queue_t<Donation>)) {
+			if( queue == null) {
 				return "The Queue is empty.";
 			}
 			else {
