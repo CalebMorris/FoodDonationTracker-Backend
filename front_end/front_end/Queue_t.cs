@@ -26,12 +26,12 @@ namespace back_end
 		public int getVal() { return this.val; }
 	}
 	
-	public class Queue<T>
+	public class Queue_t<T>
 		// min queue
 	{
 		List<Pair_t<T>> nodes;
 		
-	    public Queue() {
+	    public Queue_t() {
 			nodes = new List<Pair_t<T>>();
 		}		
 		
