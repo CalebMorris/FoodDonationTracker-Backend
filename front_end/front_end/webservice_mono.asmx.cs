@@ -298,7 +298,7 @@ namespace front_end
 				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
 		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
 				//
-				Queue_t<Donation> queue = (Queue_t<Donation>)Application["queue"];
+				Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 				queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
 							  new_donation) );
 				//
