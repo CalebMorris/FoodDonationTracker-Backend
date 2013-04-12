@@ -87,6 +87,14 @@ namespace back_end
 				min_heapify( largest );
 			}
 		}
+		
+		public string toString() {
+			string result = "";
+			for (int i = 0; i < nodes.Count; i++) {
+				result += nodes[i].getVal() + " " + nodes[i].getData() + "\n";
+			}
+			return result;
+		}
 	}
 }
 

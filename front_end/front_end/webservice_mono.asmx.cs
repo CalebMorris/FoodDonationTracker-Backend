@@ -468,6 +468,11 @@ namespace front_end
 		}
 	
 		[WebMethod]
+		public string printQueue() {
+			return "printQueue dummy data.";
+		}
+		
+		[WebMethod]
 		public string printUsers() {
 			string result = "";
 			Dictionary<String, Tuple<User,String>> users = (Dictionary<String, Tuple<User,String>>)appState["users"];
