@@ -18,6 +18,11 @@ namespace front_end
 			appState = HttpContext.Current.Application;
 		}
 		
+		// List
+		//@TODO remove holding donation if accepted
+		//@TODO check for duplicate donations
+		
+		
 		protected HttpApplicationState appState;
 		
 		public struct Query {
@@ -144,7 +149,6 @@ namespace front_end
 		[WebMethod]
 		public Query statusChange( string authenToken, string status ) {
 			//Return status, message
-			//@TODO push state on change
 			Dictionary<String, Tuple<User, String>> tmpAuthn = 
 				(Dictionary<String, Tuple<User, String>>)appState["users"];
 			User uTmp = null;
@@ -156,8 +160,6 @@ namespace front_end
 			}
 			if( uTmp.getRole() == "Driver" ) {
 				//Authenticated
-				//@TODO if state becomes available, push the next pickup (if available)
-				
 				if(status == "available") {
 				
 					List<Donor> donations = ((List<Donor>)appState["activeDonations"]);
@@ -299,8 +301,8 @@ namespace front_end
 		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
 				//
 				Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
-				queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
-							  new_donation) );
+				//queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
+				//			  new_donation) );
 				//
 				Driver driver = ((Donor)uTmp).findBestDriver( ((List<Driver>)appState["drivers"]).ToArray() );
 				if( driver != default(Driver) ) {
