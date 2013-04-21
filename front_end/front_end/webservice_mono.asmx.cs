@@ -1,6 +1,7 @@
 using System;
 using System.Web;
 using System.Web.Services;
+using System.Text;
 
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -88,12 +89,6 @@ namespace front_end
 		[WebMethod]
 		public Authen authenticateUser( string email, string password ) {
 			//Return status, token, role, message
-			MD5 hasher = MD5.Create();
-			System.Text.StringBuilder sb = new System.Text.StringBuilder();
-			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+password)))
-                    sb.Append(b.ToString("x2").ToLower());
-			string hash = sb.ToString();
-			
 			List<Driver> 	tmpDr = (List<Driver>)appState["drivers"];
 			List<Donor> 	tmpDo = (List<Donor>)appState["donors"];
 			List<Receiver> 	tmpR  = (List<Receiver>)appState["receivers"];
@@ -107,27 +102,35 @@ namespace front_end
 
 			uTmp = tmpDr.Find( x => x.username().Equals(email));
 			if( uTmp != null ) {
-				flag = uTmp.authenticate(email, password);
+				string uPass = uTmp.password();
+				string tmpPass = saltPass( password, uPass.Substring(uPass.Length-4) );
+				flag = uTmp.authenticate(email, tmpPass);
 			}
 
 			uTmp = tmpDr.Find(x => x.username().Equals(email));
 
 			if( uTmp != null ) {
-				flag = uTmp.authenticate(email, password);
+				string uPass = uTmp.password();
+				string tmpPass = saltPass( password, uPass.Substring(uPass.Length-4) );
+				flag = uTmp.authenticate(email, tmpPass);
 			}
 			else {
 				for( i = 0; i < tmpDo.Count 
 			      && tmpDo[i].username() != email; ++i );
 				if( i != tmpDo.Count ) {
-					flag = tmpDo[i].authenticate(email, password);
 					uTmp = tmpDo[i];
+					string uPass = uTmp.password();
+					string tmpPass = saltPass( password, uPass.Substring(uPass.Length-4) );
+					flag = tmpDo[i].authenticate(email, tmpPass);
 				}
 				else {
 					for( i = 0; i < tmpR.Count 
 			    	  && tmpR[i].username() != email; ++i );
 					if( i != tmpR.Count ) {
-						flag = tmpR[i].authenticate(email, password);
 						uTmp = tmpR[i];
+						string uPass = uTmp.password();
+						string tmpPass = saltPass( password, uPass.Substring(uPass.Length-4) );
+						flag = tmpR[i].authenticate(email, tmpPass);
 					}
 				}
 			}
@@ -140,6 +143,12 @@ namespace front_end
 				return new Authen( "", "Password Incorrect", "User" );
 			}
 			else {
+				MD5 hasher = MD5.Create();
+				System.Text.StringBuilder sb = new System.Text.StringBuilder();
+				foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+password)))
+	                    sb.Append(b.ToString("x2").ToLower());
+				string hash = sb.ToString();
+				
 				uTmp.authToken = hash;
 				((Dictionary<String, Tuple<User,String>>)appState["users"])[hash] = new Tuple<User,String>(uTmp, "");
 				return new Authen( hash, "Succesful Authen", uTmp.getRole() );
@@ -391,7 +400,7 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Driver>)appState["drivers"]).Add( new Driver( user, pass, new GPS(33.71,141.13) ));
+			((List<Driver>)appState["drivers"]).Add( new Driver( user, saltPass(pass), new GPS(33.71,141.13) ));
 			
 			return true;
 		}
@@ -407,7 +416,7 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, pass, new GPS(lat,lon), 100 ));
+			((List<Donor>)appState["donors"]).Add( new Donor( user, saltPass(pass), new GPS(lat,lon), 100 ));
 			
 			return true;
 		}
@@ -426,7 +435,7 @@ namespace front_end
 				}
 			}
 			((List<Receiver>)appState["receivers"]).Add( 
-					new Receiver( user, pass, new GPS(lat,lon), contactName, contactPhone, extraDetails ));
+					new Receiver( user, saltPass(pass), new GPS(lat,lon), contactName, contactPhone, extraDetails ));
 			
 			return true;
 		}
@@ -502,6 +511,29 @@ namespace front_end
 			}
 			return result;
 		}		          
+		
+		public static string saltPass( string rootPass, string specificSalt = "") {
+			string salt = specificSalt;
+			if( salt == "" ) {
+				int size = 4;
+				Random random = new Random((int)DateTime.Now.Ticks);
+	    		StringBuilder builder = new StringBuilder();
+		        char ch;
+		        for (int i = 0; i < size; i++)
+		        {
+		            ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));                 
+		            builder.Append(ch);
+		        }
+				
+				salt = builder.ToString();
+			}
+			MD5 hasher = MD5.Create();
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+			foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(rootPass+salt)))
+                    sb.Append(b.ToString("x2").ToLower());
+			string hash = sb.ToString();
+			return hash+salt;
+		}
 	}
 }
 
