@@ -60,8 +60,8 @@
     <Compile Include="GPS.cs" />
     <Compile Include="Receiver.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="Queue.cs" />
     <Compile Include="Pusher.cs" />
+    <Compile Include="Queue_t.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
