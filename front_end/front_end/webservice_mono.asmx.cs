@@ -301,8 +301,8 @@ namespace front_end
 		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
 				//
 				Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
-				//queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
-				//			  new_donation) );
+				queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
+							  new_donation) );
 				//
 				Driver driver = ((Donor)uTmp).findBestDriver( ((List<Driver>)appState["drivers"]).ToArray() );
 				if( driver != default(Driver) ) {
