@@ -18,11 +18,7 @@ namespace back_end
 		}
 		
 		public string username() { return uName; }
-		/*
-		public string password() { //Shouldn't be able to get pass
-			return uPass; 
-		} 
-		*/
+		public string password() { return uPass; } 
 		public GPS getLoc() { return location; }
 		
 		public void updateLoc( GPS loc ) { 
@@ -40,6 +36,7 @@ namespace back_end
 		public bool authenticate( string user, string pass ) {
 			return (user == uName && pass == uPass);
 		}
+		
 	}
 }
 
