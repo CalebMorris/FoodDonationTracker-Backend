@@ -22,6 +22,7 @@ namespace front_end
 			((List<Driver>)Application["drivers"]).Add(new Driver("driver","pass", new GPS(1,1)));
 			Application["users"] = new Dictionary<String, Tuple<User, String>>();
 			Application["activeDonations"] = new List<Donor>();
+			Application["queue"] = new Queue_t<Donation>();
 		}
 		
 		protected virtual void Session_Start (Object sender, EventArgs e)

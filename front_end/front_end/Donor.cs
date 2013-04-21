@@ -1,22 +1,7 @@
 using System;
 
 namespace back_end
-{
-	public struct Donation {
-		public string 	pickupContactName;
-		public string 	pickupContactPhone;
-		public string 	pickupExtraDetails;
-		public int 		pickupLatitude;
-		public int 		pickupLongitude;
-		
-		public Donation( string upName, string upPhone, 
-		                string upDetails, int upLat, int upLon ) {
-			pickupContactName = upName; pickupContactPhone = upPhone; 
-			pickupExtraDetails = upDetails;
-			pickupLatitude = upLat; pickupLongitude = upLon;
-		}
-	}
-		
+{		
 	public class Donor : User
 	{
 		public int ttl; // time until food expires in seconds
