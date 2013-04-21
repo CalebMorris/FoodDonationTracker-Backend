@@ -482,7 +482,7 @@ namespace front_end
 			
 			Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 			if( queue == null) {
-				return "The Queue is empty.";
+				return "The Queue hasn't been initiated.";
 			}
 			else {
 				return queue.toString();

@@ -89,6 +89,9 @@ namespace back_end
 		}
 		
 		public string toString() {
+			if( nodes.Count < 1 ) {
+				return "Queue is empty.";
+			}
 			string result = "Queue: \n";
 			for (int i = 0; i < nodes.Count; i++) {
 				result += nodes[i].getVal() + " " + nodes[i].getData() + "\n";
