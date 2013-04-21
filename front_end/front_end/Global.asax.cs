@@ -10,16 +10,15 @@ using back_end;
 namespace front_end
 {
 	public class Global : System.Web.HttpApplication
-	{
-		
+	{	
 		protected virtual void Application_Start (Object sender, EventArgs e)
 		{
 			Application["donors"] = new List<Donor>();
-			((List<Donor>)Application["donors"]).Add(new Donor("donor","pass",new GPS(033419084, -111938109), 100));
+			((List<Donor>)Application["donors"]).Add(new Donor("donor","1a5e9276c3085f0f612a9b8332849aa7aaaa",new GPS(033419084, -111938109), 100));
 			Application["receivers"] = new List<Receiver>();
-			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver","pass",new GPS(033419505, -111912800),"","",""));
+			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver","1a5e9276c3085f0f612a9b8332849aa7aaaa",new GPS(033419505, -111912800),"","",""));
 			Application["drivers"] = new List<Driver>();
-			((List<Driver>)Application["drivers"]).Add(new Driver("driver","pass", new GPS(1,1)));
+			((List<Driver>)Application["drivers"]).Add(new Driver("driver","1a5e9276c3085f0f612a9b8332849aa7aaaa", new GPS(1,1)));
 			Application["users"] = new Dictionary<String, Tuple<User, String>>();
 			Application["activeDonations"] = new List<Donor>();
 			Application["queue"] = new Queue_t<Donation>();
