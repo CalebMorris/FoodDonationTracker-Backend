@@ -145,7 +145,7 @@ namespace front_end
 			else {
 				MD5 hasher = MD5.Create();
 				System.Text.StringBuilder sb = new System.Text.StringBuilder();
-				foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+password)))
+				foreach (Byte b in hasher.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email+uTmp.password())))
 	                    sb.Append(b.ToString("x2").ToLower());
 				string hash = sb.ToString();
 				
