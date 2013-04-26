@@ -316,9 +316,9 @@ namespace front_end
 			
 			if( uTmp.getRole() == "Donor" ) {
 				Donation new_donation = new Donation(pickupContactName, pickupContactName,
-					pickupExtraDetails, pickupLatitude, pickupLongitude, (Donor)uTmp);
-				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
-		                      pickupExtraDetails, pickupLatitude, pickupLongitude, (Donor)uTmp));
+					pickupExtraDetails, pickupLatitude, pickupLongitude, (Donor)uTmp,
+				    (int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds));
+				((Donor)uTmp).addDonation(new_donation);
 				Driver driver = ((Donor)uTmp).findBestDriver( ((List<Driver>)appState["drivers"]).ToArray() );
 				if( driver != default(Driver) ) {
 					// There is at least one driver available
@@ -337,7 +337,7 @@ namespace front_end
 				else {
 					((List<Donor>)appState["activeDonations"]).Add((Donor)uTmp);
 					Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
-					queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
+					queue.insert( new Pair_t<Donation>(new_donation.getEpoch(),
 								  new_donation) );
 					return "No Driver Available";
 				}
