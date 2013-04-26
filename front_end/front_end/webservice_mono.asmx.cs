@@ -180,8 +180,7 @@ namespace front_end
 						// the assignment is being rejected
 					
 				}
-				if( ((Driver)uTmp).getStatus() == "unassigned" &&
-				   	status == "available") {
+				if( status == "available") {
 				
 					Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 					
