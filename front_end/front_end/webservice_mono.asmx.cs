@@ -305,11 +305,9 @@ namespace front_end
 			if( uTmp.getRole() == "Donor" ) {
 				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
 		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
-				//
 				Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 				queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
 							  new_donation) );
-				//
 				Driver driver = ((Donor)uTmp).findBestDriver( ((List<Driver>)appState["drivers"]).ToArray() );
 				if( driver != default(Driver) ) {
 					// There is at least one driver available
@@ -322,7 +320,6 @@ namespace front_end
 					}
 					else {
 						// No drop-off. what do?
-						//@TODO ???
 						return "User is empty?";
 					}
 				}
