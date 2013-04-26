@@ -8,13 +8,14 @@ namespace back_end
 		       pickupExtraDetails;
 		public int pickupLatitude, pickupLongitude;
 		public bool active;
+		public Donor donor;
 		//@TODO put time component in the donation itself
 		//public int ttl; // time until food expires in seconds
 		//public TimeSpan lastCheck;
 		
 		public Donation ( string pickupContactName, 
 		                  string pickupContactPhone, string pickupExtraDetails,
-						  int pickupLatitude, int pickupLongitude )
+						  int pickupLatitude, int pickupLongitude, Donor donor )
 		{
 			// Needs to add a time field that is made when created/activated
 			this.pickupContactName  = pickupContactName;
@@ -23,6 +24,7 @@ namespace back_end
 			this.pickupLatitude		= pickupLatitude;
 			this.pickupLongitude 	= pickupLongitude;
 			this.active 			= true;
+			this.donor				= donor;
 		}
 		
 		public int compareTo( Donation another ) {

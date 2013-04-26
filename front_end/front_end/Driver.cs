@@ -5,7 +5,7 @@ namespace back_end
 	public class Driver : User
 	{	
 		protected string status;
-		Donor pickup;
+		Donation pickup;
 		Receiver dropoff;
 		
 		public Driver (): base("","","Driver",null) {
@@ -19,16 +19,16 @@ namespace back_end
 		}
 		
 		public string getStatus() { return status; }
-		public Donor getPickup() { return pickup; }
+		public Donation getPickup() { return pickup; }
 		public Receiver getDropoff() { return dropoff; }
 		public string updateStatus( string stat ) { 
 			status = stat; 
 			return status; 
 		}
-		public void assignPickup( Donor donor ) {
-			if( donor != default(Donor) ) {
+		public void assignPickup( Donation donation ) {
+			if( donation != default(Donation) ) {
 				status = "assigned";
-				pickup = donor;
+				pickup = donation;
 			}
 			else {
 				// throw error				

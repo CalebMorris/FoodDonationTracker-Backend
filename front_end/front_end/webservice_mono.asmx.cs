@@ -173,27 +173,37 @@ namespace front_end
 			}
 			if( uTmp.getRole() == "Driver" ) {
 				//Authenticated
-				if(status == "available") {
-				
-					List<Donor> donations = ((List<Donor>)appState["activeDonations"]);
+				if( ((Driver)uTmp).getStatus() == "assigned" && 
+				   	status == "unavailable" ) {
+					// Rejecting a donation
+					//@TODO If assigned and changed to unavailable
+						// the assignment is being rejected
 					
-					if( donations != null && donations.Count > 0 ) {
-						Donor nextDonor = donations[0];
-						Driver driver = (Driver)uTmp;
-						Receiver dropoff = nextDonor.findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
-						if( dropoff != default(Receiver) ) {
-							// There is at least one reciever
-							driver.assignPickup(nextDonor);
-							driver.assignDropoff(dropoff);
-							testPush(driver.authToken,"Donation Available");
-						}
-						else {
-							// No drop-off. what do?
-							return new Query("error", "User is empty?");
+				}
+				if( ((Driver)uTmp).getStatus() == "unassigned" &&
+				   	status == "available") {
+				
+					Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
+					
+					if( queue != null && !queue.is_empty() ) {
+						Donation pushing_donation = queue.pop().getData();
+						if( pushing_donation != default(Donation) ) {
+							Donor nextDonor = pushing_donation.donor;
+							Driver driver = (Driver)uTmp;
+							Receiver dropoff = nextDonor.findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
+							if( dropoff != default(Receiver) ) {
+								// There is at least one reciever
+								driver.assignPickup(pushing_donation);
+								driver.assignDropoff(dropoff);
+								testPush(driver.authToken,"Donation Available");
+							}
+							else {
+								// No drop-off. what do?
+								return new Query("error", "User is empty?");
+							}
 						}
 					}
 				}
-				
 				return new Query( ((Driver)uTmp).updateStatus(status), "Status Succesfully Updated" );
 			}
 			else {
@@ -280,7 +290,7 @@ namespace front_end
 			User uTmp = users[authenToken].Item1;
 			if( uTmp.getRole() == "Driver" ) {
 				/* Need to return both donor and dropoff info */
-				Donation tDon = ((Driver)uTmp).getPickup().donation;
+				Donation tDon = ((Driver)uTmp).getPickup();
 				Receiver tDrop = ((Driver)uTmp).getDropoff();
 				return new Transfer(tDon.pickupContactName, tDon.pickupContactPhone,
 				  tDon.pickupExtraDetails, tDon.pickupLatitude, tDon.pickupLongitude,
@@ -295,8 +305,6 @@ namespace front_end
 		public string submitDonation( string authenToken, string pickupContactName, string pickupContactPhone, 
 		                     string pickupExtraDetails, int pickupLatitude, int pickupLongitude ) {
 			//@TODO Don't add to queue unless there are no drivers (don unassigned)
-			Donation new_donation = new Donation(pickupContactName, pickupContactName,
-			                              pickupExtraDetails, pickupLatitude, pickupLongitude);
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
 			if (users == null) {
 				users = new Dictionary<string, Tuple<User, string>> ();
@@ -308,18 +316,17 @@ namespace front_end
 			User uTmp = users[authenToken].Item1;
 			
 			if( uTmp.getRole() == "Donor" ) {
+				Donation new_donation = new Donation(pickupContactName, pickupContactName,
+					pickupExtraDetails, pickupLatitude, pickupLongitude, (Donor)uTmp);
 				((Donor)uTmp).addDonation(new Donation( pickupContactName, pickupContactPhone, 
-		                      pickupExtraDetails, pickupLatitude, pickupLongitude));
-				Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
-				queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
-							  new_donation) );
+		                      pickupExtraDetails, pickupLatitude, pickupLongitude, (Donor)uTmp));
 				Driver driver = ((Donor)uTmp).findBestDriver( ((List<Driver>)appState["drivers"]).ToArray() );
 				if( driver != default(Driver) ) {
 					// There is at least one driver available
 					Receiver dropoff = ((Donor)uTmp).findBestDropOff( ((List<Receiver>)appState["receivers"]).ToArray() );
 					if( dropoff != default(Receiver) ) {
 						// There is at least one reciever
-						driver.assignPickup((Donor)uTmp);
+						driver.assignPickup(new_donation);
 						driver.assignDropoff(dropoff);
 						testPush(driver.authToken,"Donation Available");
 					}
@@ -330,6 +337,9 @@ namespace front_end
 				}
 				else {
 					((List<Donor>)appState["activeDonations"]).Add((Donor)uTmp);
+					Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
+					queue.insert( new Pair_t<Donation>((int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds),
+								  new_donation) );
 					return "No Driver Available";
 				}
 				return "Pushing Donation";
