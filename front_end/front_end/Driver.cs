@@ -43,20 +43,5 @@ namespace back_end
 			}
 		}
 		
-		public void getPickup( Donor[] donors ) {
-			//if( donors.Length <= 0  )
-			//	return null;
-			int closest = 0;
-			double D = this.location.difference(donors[0].location);
-			
-			for( int i = 1; i < donors.Length; ++i ) {
-				double tmp = this.location.difference(donors[i].location);
-				if( tmp < D ) {
-					closest = i;
-					D = tmp;
-				}
-			}
-			this.pickup = donors[closest];
-		}
 	}
 }

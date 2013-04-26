@@ -88,6 +88,10 @@ namespace back_end
 			}
 		}
 		
+		public bool is_empty() {
+			return nodes.Count < 1;			
+		}
+		
 		public string toString() {
 			if( nodes.Count < 1 ) {
 				return "Queue is empty.";
