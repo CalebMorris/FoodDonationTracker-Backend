@@ -4,18 +4,14 @@ namespace back_end
 {		
 	public class Donor : User
 	{
-		public int ttl; // time until food expires in seconds
-		public TimeSpan lastCheck;
 		public Donation donation;
 		public string status;
 		
 		public Donor ():base("","","Donor",null) {
-			lastCheck = DateTime.Now.TimeOfDay;
 			status = "empty";
 		}
 		public Donor( string uname, string upass, GPS loc, int timetolive ) 
 				: base(uname, upass, "Donor", loc ) {
-			lastCheck = DateTime.Now.TimeOfDay;
 			status = "empty";
 		}
 		
@@ -53,20 +49,6 @@ namespace back_end
 			}
 			else {
 				return default(Driver);
-			}
-		}
-		
-		public int timeLeft() {
-			// Updates the ttl
-			// If the ttl is reached 0 or less return -1 
-			//   and send message that time has expired
-			lastCheck = (DateTime.Now.TimeOfDay - this.lastCheck);
-			ttl -= (int)lastCheck.TotalSeconds;
-			if( ttl <= 0 ) {
-				return -1;
-			}
-			else{
-				return 1;
 			}
 		}
 		

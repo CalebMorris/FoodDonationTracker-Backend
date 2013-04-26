@@ -8,6 +8,9 @@ namespace back_end
 		       pickupExtraDetails;
 		public int pickupLatitude, pickupLongitude;
 		public bool active;
+		//@TODO put time component in the donation itself
+		//public int ttl; // time until food expires in seconds
+		//public TimeSpan lastCheck;
 		
 		public Donation ( string pickupContactName, 
 		                  string pickupContactPhone, string pickupExtraDetails,
