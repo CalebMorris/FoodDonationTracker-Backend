@@ -164,6 +164,7 @@ namespace front_end
 			//@TODO If unavailable to available push donation and remove from queue
 			Dictionary<String, Tuple<User, String>> tmpAuthn = 
 				(Dictionary<String, Tuple<User, String>>)appState["users"];
+			Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 			User uTmp = null;
 			if( tmpAuthn.ContainsKey(authenToken) ) {
 				uTmp = tmpAuthn[authenToken].Item1;
@@ -176,14 +177,13 @@ namespace front_end
 				if( ((Driver)uTmp).getStatus() == "assigned" && 
 				   	status == "unavailable" ) {
 					// Rejecting a donation
-					//@TODO If assigned and changed to unavailable
-						// the assignment is being rejected
-					
+					if( queue != null ) {
+						Donation rejecting_donation = ((Driver)uTmp).getPickup();
+						queue.insert( new Pair_t<Donation>(rejecting_donation.getEpoch(),
+								  rejecting_donation) );
+					}
 				}
 				if( status == "available") {
-				
-					Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
-					
 					if( queue != null && !queue.is_empty() ) {
 						Donation pushing_donation = queue.pop().getData();
 						if( pushing_donation != default(Donation) ) {
