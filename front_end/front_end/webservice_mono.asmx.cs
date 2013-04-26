@@ -22,6 +22,7 @@ namespace front_end
 		// List
 		//@TODO remove holding donation if accepted
 		//@TODO check for duplicate donations
+		//@TODO allow donor to have 1+ donations active/inactive
 		
 		
 		protected HttpApplicationState appState;
@@ -185,7 +186,6 @@ namespace front_end
 						}
 						else {
 							// No drop-off. what do?
-							//@TODO ???
 							return new Query("error", "User is empty?");
 						}
 					}
@@ -217,7 +217,6 @@ namespace front_end
 		
 		[WebMethod]
 		public bool GCMRegister( string authenToken, string regId ) {
-			//@TODO Implement
 			Dictionary<String, Tuple<User, String>> users = (Dictionary<String, Tuple<User,String>>)appState["users"];
 			if( appState["users"] == null ) {
 				//There aren't any users
@@ -291,10 +290,8 @@ namespace front_end
 		[WebMethod]
 		public string submitDonation( string authenToken, string pickupContactName, string pickupContactPhone, 
 		                     string pickupExtraDetails, int pickupLatitude, int pickupLongitude ) {
-			//@TODO implement
 			Donation new_donation = new Donation(pickupContactName, pickupContactName,
 			                              pickupExtraDetails, pickupLatitude, pickupLongitude);
-			//
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
 			if (users == null) {
 				users = new Dictionary<string, Tuple<User, string>> ();
@@ -487,8 +484,6 @@ namespace front_end
 	
 		[WebMethod]
 		public string printQueue() {
-			//TODO Call the donation queue print
-			
 			Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
 			if( queue == null) {
 				return "The Queue hasn't been initiated.";

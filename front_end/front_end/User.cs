@@ -5,7 +5,7 @@ namespace back_end
 	public class User
 	{	
 		string uName;
-		string uPass; //TODO want-to change to not storing password
+		string uPass;
 		string role;
 		public GPS location;
 		public string authToken;
