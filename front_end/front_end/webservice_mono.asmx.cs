@@ -159,6 +159,9 @@ namespace front_end
 		[WebMethod]
 		public Query statusChange( string authenToken, string status ) {
 			//Return status, message
+			//@TODO If assigned and changed to unavailable
+				// the assignment is being rejected
+			//@TODO If unavailable to available push donation and remove from queue
 			Dictionary<String, Tuple<User, String>> tmpAuthn = 
 				(Dictionary<String, Tuple<User, String>>)appState["users"];
 			User uTmp = null;
@@ -262,6 +265,7 @@ namespace front_end
 		public Transfer queryDonation( string authenToken ) {
 			/* Retrieves information of donation */
 			//@TODO dummy return
+			//@TODO on query of assigment, remove from the queue if there
 			return new Transfer("Caleb", "480-123-4567", "Use the doorbell", 
 			           033419084, -111938109, "Michael", "602-987-6543", "Don't fall into the valcano",
 			           033419505, -111912800, "Test Transfer");
@@ -290,6 +294,7 @@ namespace front_end
 		[WebMethod]
 		public string submitDonation( string authenToken, string pickupContactName, string pickupContactPhone, 
 		                     string pickupExtraDetails, int pickupLatitude, int pickupLongitude ) {
+			//@TODO Don't add to queue unless there are no drivers (don unassigned)
 			Donation new_donation = new Donation(pickupContactName, pickupContactName,
 			                              pickupExtraDetails, pickupLatitude, pickupLongitude);
 			Dictionary<String, Tuple<User,String>> users = ((Dictionary<String, Tuple<User,String>>)appState ["users"]);
