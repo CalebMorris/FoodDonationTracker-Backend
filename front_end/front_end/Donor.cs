@@ -10,7 +10,7 @@ namespace back_end
 		public Donor ():base("","","Donor",null) {
 			status = "empty";
 		}
-		public Donor( string uname, string upass, GPS loc, int timetolive ) 
+		public Donor( string uname, string upass, GPS loc ) 
 				: base(uname, upass, "Donor", loc ) {
 			status = "empty";
 		}

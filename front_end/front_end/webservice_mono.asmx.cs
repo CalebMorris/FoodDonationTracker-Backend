@@ -425,7 +425,7 @@ namespace front_end
 					return false;
 				}
 			}
-			((List<Donor>)appState["donors"]).Add( new Donor( user, saltPass(pass), new GPS(lat,lon), 100 ));
+			((List<Donor>)appState["donors"]).Add( new Donor( user, saltPass(pass), new GPS(lat,lon) ));
 			
 			return true;
 		}
