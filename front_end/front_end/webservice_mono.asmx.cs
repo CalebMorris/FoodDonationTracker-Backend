@@ -195,7 +195,7 @@ namespace front_end
 								// There is at least one reciever
 								driver.assignPickup(pushing_donation);
 								driver.assignDropoff(dropoff);
-								driver.updateLoc("assigned");
+								driver.updateStatus("assigned");
 								testPush(driver.authToken,"Donation Available");
 							}
 							else {
@@ -329,7 +329,7 @@ namespace front_end
 						// There is at least one reciever
 						driver.assignPickup(new_donation);
 						driver.assignDropoff(dropoff);
-						driver.updateLoc("assigned");
+						driver.updateStatus("assigned");
 						testPush(driver.authToken,"Donation Available");
 					}
 					else {
