@@ -36,6 +36,7 @@ namespace back_end
 		}
 		public void assignDropoff( Receiver reciever ) {
 			if( reciever != default(Receiver) ) {
+				status = "assigned";
 				dropoff = reciever;
 			}
 			else {
