@@ -175,10 +175,9 @@ namespace front_end
 			}
 			if( uTmp.getRole() == "Driver" ) {
 				//Authenticated
-				if( ((Driver)uTmp).getStatus() == "assigned" && 
-				   	status == "unavailable" ) {
+				if( status == "unavailable" ) {
 					// Rejecting a donation
-					if( queue != null ) {
+					if( ((Driver)uTmp).getPickup().active == true ) {
 						Donation rejecting_donation = ((Driver)uTmp).getPickup();
 						queue.insert( new Pair_t<Donation>(rejecting_donation.getEpoch(),
 								  rejecting_donation) );
