@@ -114,6 +114,7 @@ namespace front_end
 				string uPass = uTmp.password();
 				string tmpPass = saltPass( password, uPass.Substring(uPass.Length-4) );
 				flag = uTmp.authenticate(email, tmpPass);
+				((Driver)uTmp).updateStatus("unavailable");
 			}
 			else {
 				for( i = 0; i < tmpDo.Count 
@@ -194,6 +195,7 @@ namespace front_end
 								// There is at least one reciever
 								driver.assignPickup(pushing_donation);
 								driver.assignDropoff(dropoff);
+								driver.updateLoc("assigned");
 								testPush(driver.authToken,"Donation Available");
 							}
 							else {
@@ -327,6 +329,7 @@ namespace front_end
 						// There is at least one reciever
 						driver.assignPickup(new_donation);
 						driver.assignDropoff(dropoff);
+						driver.updateLoc("assigned");
 						testPush(driver.authToken,"Donation Available");
 					}
 					else {
