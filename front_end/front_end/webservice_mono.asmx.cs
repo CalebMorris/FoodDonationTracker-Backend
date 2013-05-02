@@ -316,7 +316,7 @@ namespace front_end
 			User uTmp = users[authenToken].Item1;
 			
 			if( uTmp.getRole() == "Donor" ) {
-				Donation new_donation = new Donation(pickupContactName, pickupContactName,
+				Donation new_donation = new Donation(pickupContactName, pickupContactPhone,
 					pickupExtraDetails, pickupLatitude, pickupLongitude, (Donor)uTmp,
 				    (int)((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds));
 				((Donor)uTmp).addDonation(new_donation);
