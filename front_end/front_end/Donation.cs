@@ -9,7 +9,6 @@ namespace back_end
 		public int pickupLatitude, pickupLongitude;
 		public bool active;
 		public Donor donor;
-		//@TODO put time component in the donation itself
 		public int epoch_time;
 		
 		public Donation ( string pickupContactName, 
