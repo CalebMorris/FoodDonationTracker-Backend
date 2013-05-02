@@ -171,7 +171,7 @@ namespace front_end
 				//Authenticated
 				if( status == "unavailable" ) {
 					// Rejecting a donation
-					if( ((Driver)uTmp).getPickup().active == true ) {
+					if( ((Driver)uTmp).getPickup() != null && ((Driver)uTmp).getPickup().active == true ) {
 						Donation rejecting_donation = ((Driver)uTmp).getPickup();
 						queue.insert( new Pair_t(rejecting_donation.getEpoch(),
 								  rejecting_donation) );
