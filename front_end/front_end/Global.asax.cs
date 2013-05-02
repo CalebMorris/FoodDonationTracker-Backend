@@ -16,7 +16,9 @@ namespace front_end
 			Application["donors"] = new List<Donor>();
 			((List<Donor>)Application["donors"]).Add(new Donor("donor",webservice_mono.saltPass("pass"),new GPS(033419084, -111938109)));
 			Application["receivers"] = new List<Receiver>();
-			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver",webservice_mono.saltPass("pass"),new GPS(033419505, -111912800),"","",""));
+			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver",webservice_mono.saltPass("pass"),new GPS(033419505, -111912800),"Dummy1","480-123-4567","None"));
+			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver",webservice_mono.saltPass("pass"),new GPS(033219505, -111712800),"Dummy2","480-231-4567","None"));
+			((List<Receiver>)Application["receivers"]).Add(new Receiver("receiver",webservice_mono.saltPass("pass"),new GPS(033019505, -111512800),"Dummy3","480-312-4567","None"));
 			Application["drivers"] = new List<Driver>();
 			((List<Driver>)Application["drivers"]).Add(new Driver("driver",webservice_mono.saltPass("pass"), new GPS(1,1)));
 			Application["users"] = new Dictionary<String, Tuple<User, String>>();
