@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace back_end
 {
-	public class Pair_t<T> {
+	public class Pair_t {
 		int val;
-		T data;
-		public Pair_t( int val, T data ) {
+		Donation data;
+		public Pair_t( int val, Donation data ) {
 			this.val = val;
 			this.data = data;
 		}
-		public int compareTo( Pair_t<T> another ) {
+		public int compareTo( Pair_t another ) {
 			//-1,0,1 <,==,>
 			if( this.val < another.val ) {
 				return -1;				
@@ -22,20 +22,20 @@ namespace back_end
 				return 0;				
 			}
 		}
-		public T getData() { return this.data; }
+		public Donation getData() { return this.data; }
 		public int getVal() { return this.val; }
 	}
 	
 	public class Queue_t<T>
 		// min queue
 	{
-		List<Pair_t<T>> nodes;
+		List<Pair_t> nodes;
 		
 	    public Queue_t() {
-			nodes = new List<Pair_t<T>>();
+			nodes = new List<Pair_t>();
 		}		
 		
-		public void insert( Pair_t<T> pair ) {
+		public void insert( Pair_t pair ) {
 			nodes.Add(pair);
 			//Init heapify
 			int current = nodes.Count-1;
@@ -45,11 +45,11 @@ namespace back_end
 			}
 		}
 		
-		public Pair_t<T> pop() {
+		public Pair_t pop() {
 			if( nodes.Count < 1 ) {
-				return default(Pair_t<T>);				
+				return default(Pair_t);				
 			}
-			Pair_t<T> result = nodes[0];
+			Pair_t result = nodes[0];
 			//Console.WriteLine(result.getData());
 			nodes[0] = nodes[nodes.Count-1];
 			nodes.RemoveAt(nodes.Count-1);
@@ -60,7 +60,7 @@ namespace back_end
 		
 		int swap(int pos1, int pos2) {
 //			Console.WriteLine("swap("+pos1+","+pos2+")");
-			Pair_t<T> tmp = nodes[pos1];
+			Pair_t tmp = nodes[pos1];
 			nodes[pos1] = nodes[pos2];
 			nodes[pos2] = tmp;
 			return 1;
@@ -98,7 +98,10 @@ namespace back_end
 			}
 			string result = "Queue: \n";
 			for (int i = 0; i < nodes.Count; i++) {
-				result += nodes[i].getVal() + " " + nodes[i].getData() + "\n";
+				Donation d = (Donation)nodes[i].getData();
+				result += nodes[i].getVal() + " " + nodes[i].getData() + " "
+						+ d.pickupContactName + " " + d.pickupContactPhone + " "
+		       			+ d.pickupExtraDetails + "\n";
 			}
 			return result;
 		}

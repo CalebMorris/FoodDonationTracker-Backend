@@ -179,7 +179,7 @@ namespace front_end
 					// Rejecting a donation
 					if( ((Driver)uTmp).getPickup().active == true ) {
 						Donation rejecting_donation = ((Driver)uTmp).getPickup();
-						queue.insert( new Pair_t<Donation>(rejecting_donation.getEpoch(),
+						queue.insert( new Pair_t(rejecting_donation.getEpoch(),
 								  rejecting_donation) );
 					}
 				}
@@ -339,7 +339,7 @@ namespace front_end
 				else {
 					((List<Donor>)appState["activeDonations"]).Add((Donor)uTmp);
 					Queue_t<Donation> queue = (Queue_t<Donation>)appState["queue"];
-					queue.insert( new Pair_t<Donation>(new_donation.getEpoch(),
+					queue.insert( new Pair_t(new_donation.getEpoch(),
 								  new_donation) );
 					return "No Driver Available";
 				}
